@@ -1,0 +1,56 @@
+#ifndef _LIBELYBOT_CAN_H
+#define _LIBELYBOT_CAN_H
+
+
+#include "main.h"
+
+/* NAN 表示不限制 */
+#define  INI8_NAN   0x80
+#define  INT16_NAN  0x8000
+#define  INT32_NAN  0x80000000
+
+
+typedef struct
+{
+    uint32_t id;
+    int16_t position;
+    int16_t velocity;
+    int16_t torque;
+} motor_state_s;
+
+typedef struct
+{
+    union
+    {
+        motor_state_s motor;
+        uint8_t data[24];
+    };
+} motor_state_t;
+
+
+extern motor_state_t motor_state;
+extern uint8_t motor_read_flag;
+
+
+
+uint8_t CAN_Send_Msg(FDCAN_HandleTypeDef *hfdcanx, uint32_t id, uint8_t *msg, uint8_t len);
+void fdcan_filter_init(FDCAN_HandleTypeDef *fdcanHandle);
+
+void motor_control_volt(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vol);
+void motor_control_cur(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t cur);
+void motor_control_Pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t pos, int16_t tqe);
+void motor_control_Vel(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vel, int16_t tqe);
+void motor_control_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t tqe);
+void motor_control_pos_val_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t pos, int16_t val, int16_t tqe);
+void rezero_pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id);
+void conf_write(FDCAN_HandleTypeDef *hfdcanx, uint8_t id);
+void timed_return_motor_status(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t t_ms);
+void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+
+
+
+void motor_read(FDCAN_HandleTypeDef *hfdcanx, uint8_t id);
+
+
+#endif
