@@ -24,7 +24,12 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "led.h"
+#include "my_can.h"
 #include "libelybot_can.h"
+#include "motor.h"
+#include "motor_control.h"
+#include "test_motor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,6 +72,7 @@ int main(void)
     /* USER CODE BEGIN 1 */
     uint32_t tick_500ms = 0;
     uint32_t tick_1ms = 0;
+    uint32_t tick_1000ms = 0;
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -98,7 +104,7 @@ int main(void)
     fdcan_filter_init(&hfdcan2);
     fdcan_filter_init(&hfdcan3);
     /* USER CODE END 2 */
-    DEBUG_PRINT("此工程引脚配置适用于高擎主控板 1.4v");
+
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1)
@@ -106,8 +112,6 @@ int main(void)
         if (HAL_GetTick() - tick_500ms >= 500)
         {
             tick_500ms = HAL_GetTick();
-            HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-            DEBUG_PRINT("AAA");
 
             motor_read(&hfdcan1, 1);
             motor_read(&hfdcan2, 1);
@@ -117,20 +121,25 @@ int main(void)
         if (motor_read_flag == 1)
         {
             motor_read_flag = 0;
-            DEBUG_PRINT("motor %x %d  %d %d", motor_state.motor.id, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
+
         }
 
         if (HAL_GetTick() - tick_1ms >= 1)
         {
             tick_1ms = HAL_GetTick();
+            test_motor_control(1);
 
-            motor_control_pos_val_tqe(&hfdcan1, 1, INT16_NAN, 400, 1000);
-            motor_control_pos_val_tqe(&hfdcan2, 1, INT16_NAN, 400, 1000);
-            motor_control_pos_val_tqe(&hfdcan3, 1, INT16_NAN, 400, 1000);
         }
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
+        if (HAL_GetTick() - tick_1000ms >= 1000)
+        {
+            tick_1000ms = HAL_GetTick();
+            led_toggle();
+
+            motor_print_state();
+        }
     }
     /* USER CODE END 3 */
 }
