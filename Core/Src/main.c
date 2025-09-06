@@ -26,9 +26,10 @@
 /* USER CODE BEGIN Includes */
 #include "led.h"
 #include "my_can.h"
-#include "libelybot_can.h"
+
 #include "motor.h"
 #include "motor_control.h"
+#include "motor_config.h"
 #include "test_motor.h"
 /* USER CODE END Includes */
 
@@ -99,18 +100,16 @@ int main(void)
     MX_FDCAN3_Init();
     /* USER CODE BEGIN 2 */
 
-    fdcan_filter_init(&hfdcan1);
-    fdcan_filter_init(&hfdcan2);
-    fdcan_filter_init(&hfdcan3);
+    can_filter_init(&hfdcan1);
+    can_filter_init(&hfdcan2);
+    can_filter_init(&hfdcan3);
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-
-
-        if (HAL_GetTick() - tick_100ms >= 1)
+        if (HAL_GetTick() - tick_100ms >= 100)
         {
             tick_100ms = HAL_GetTick();
             test_motor_control(1);
@@ -124,7 +123,7 @@ int main(void)
             tick_1000ms = HAL_GetTick();
             led_toggle();
 
-//            motor_print_state();
+            motor_print_state();
         }
 		
 		motor_process_state_all();

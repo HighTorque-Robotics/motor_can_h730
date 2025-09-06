@@ -13,7 +13,7 @@
  */
 void motor_control_volt(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vol)
 {
-    static uint8_t tdata[7] = {0x01, 0x00, 0x08, 0x05, 0x1b, 0x00, 0x00};
+    static uint8_t tdata[] = {0x01, 0x00, 0x08, 0x05, 0x1b, 0x00, 0x00};
 
     *(int16_t *)&tdata[5] = vol;
 
@@ -28,7 +28,7 @@ void motor_control_volt(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vol)
  */
 void motor_control_cur(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t cur)
 {
-    static uint8_t tdata[7] = {0x01, 0x00, 0x09, 0x05, 0x1c, 0x00, 0x00};
+    static uint8_t tdata[] = {0x01, 0x00, 0x09, 0x05, 0x1c, 0x00, 0x00};
 
     *(int16_t *)&tdata[5] = cur;
 
@@ -44,12 +44,12 @@ void motor_control_cur(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t cur)
  */
 void motor_control_Pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t pos, int16_t tqe)
 {
-    uint8_t tdata[8] = {0x07, 0x07, 0x0A, 0x05, 0x00, 0x00, 0x80, 0x00};
+    static uint8_t tdata[] = {0x07, 0x07, 0x0A, 0x05, 0x00, 0x00, 0x80, 0x00};
 
     *(int16_t *)&tdata[2] = pos;
     *(int16_t *)&tdata[6] = tqe;
 
-    can_send(hfdcanx, id, tdata, 8);
+    can_send(hfdcanx, id, tdata, sizeof(tdata));
 }
 
 
@@ -61,12 +61,12 @@ void motor_control_Pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t pos, in
  */
 void motor_control_Vel(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vel, int16_t tqe)
 {
-    uint8_t tdata[8] = {0x07, 0x07, 0x00, 0x80, 0x20, 0x00, 0x80, 0x00};
+    static uint8_t tdata[] = {0x07, 0x07, 0x00, 0x80, 0x20, 0x00, 0x80, 0x00};
 
     *(int16_t *)&tdata[4] = vel;
     *(int16_t *)&tdata[6] = tqe;
 
-    can_send(hfdcanx, id, tdata, 8);
+    can_send(hfdcanx, id, tdata, sizeof(tdata));
 }
 
 
@@ -77,11 +77,11 @@ void motor_control_Vel(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vel, in
  */
 void motor_control_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t tqe)
 {
-    uint8_t tdata[8] = {0x05, 0x13, 0x00, 0x80, 0x20, 0x00, 0x80, 0x00};
+    static uint8_t tdata[] = {0x05, 0x13, 0x00, 0x80};
 
     *(int16_t *)&tdata[2] = tqe;
 
-    can_send(hfdcanx, id, tdata, 4);
+    can_send(hfdcanx, id, tdata, sizeof(tdata));
 }
 
 
@@ -94,13 +94,13 @@ void motor_control_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t tqe)
  */
 void motor_control_pos_val_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t pos, int16_t val, int16_t tqe)
 {
-    static uint8_t tdata[8] = {0x07, 0x35, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t tdata[] = {0x07, 0x35, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     *(int16_t *)&tdata[2] = val;
     *(int16_t *)&tdata[4] = tqe;
     *(int16_t *)&tdata[6] = pos;
 
-    can_send(hfdcanx, id, tdata, 8);
+    can_send(hfdcanx, id, tdata, sizeof(tdata));
 }
 
 
@@ -176,11 +176,24 @@ void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @brief 读取电机位置、速度、力矩指令
  * @param id 电机ID
  */
-void motor_read(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
+void send_read_motor_state(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
 {
-    static uint8_t tdata[8] = {0x17, 0x01};
+    static uint8_t tdata[] = {0x17, 0x01};
 
     can_send(hfdcanx, 0x8000 | id, tdata, sizeof(tdata));
+}
+
+
+/**
+ * @brief 获取电机固件版本
+ * @param fdcanHandle &hfdcanx
+ * @param id id 电机ID
+ */
+void send_read_motor_version(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+{
+    const uint8_t cmd[] = {0x15, 0xB5, 0x02};
+
+    can_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 

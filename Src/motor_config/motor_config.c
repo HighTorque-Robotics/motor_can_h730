@@ -39,9 +39,9 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    //    set_motor_reset_int8(fdcanHandle, id);
-    //    set_motor_reset_int8(fdcanHandle, id);
-    //    set_motor_reset_int8(fdcanHandle, id);
+    set_motor_stop(fdcanHandle, id);
+    set_motor_stop(fdcanHandle, id);
+    set_motor_stop(fdcanHandle, id);
     HAL_Delay(100);
 
     if (motor_config_closed_loop(rezero_pos, fdcanHandle, id) != 0)
@@ -54,9 +54,6 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
         return 2;
     }
 
-    //    set_motor_reset_int8(fdcanHandle, id);
-    //    set_motor_reset_int8(fdcanHandle, id);
-    //    set_motor_reset_int8(fdcanHandle, id);
     HAL_Delay(100);
 
     return 0;
@@ -73,14 +70,15 @@ uint8_t motor_conf_write(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
+    set_motor_stop(fdcanHandle, id);
+    set_motor_stop(fdcanHandle, id);
+    set_motor_stop(fdcanHandle, id);
+
     if (motor_config_closed_loop(conf_write, fdcanHandle, id) != 0)
     {
         return 1;
     }
-
-    //    set_motor_reset_int8(fdcanHandle, id);
-    //    set_motor_reset_int8(fdcanHandle, id);
-    //    set_motor_reset_int8(fdcanHandle, id);
+    
     HAL_Delay(100);
 
     return 0;

@@ -110,18 +110,6 @@ void motor_set_pos_vel_MAXtqe(port_t portx, const uint8_t id,
 }
 
 /**
- * @brief 重置电机零位
- * @param fdcanHandle &hfdcanx
- * @param id 电机 ID
- */
-void motor_rezero_pos(port_t portx, const uint8_t id)
-{
-    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-
-    rezero_pos(fdcanHandle, id);
-}
-
-/**
  * @brief 停止模式，电机三相都断开（并让电机返回状态信息）
  * @param fdcanHandle &hfdcanx
  * @param id 电机 ID
@@ -129,7 +117,6 @@ void motor_rezero_pos(port_t portx, const uint8_t id)
 void motor_set_stop(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-
 
     set_motor_stop(fdcanHandle, id);
 }
@@ -143,7 +130,34 @@ void motor_set_brake(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    //    set_motor_brake_int8(fdcanHandle, id);
     set_motor_brake(fdcanHandle, id);
+}
+
+
+/**
+ * @brief 发送查询电机状态指令（电机会返回位置、速度、力矩）
+ * @param id 电机 ID
+ */
+void motor_get_state_send(port_t portx, const uint8_t id)
+{
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+
+    send_read_motor_state(fdcanHandle, id);
+}
+
+
+/**
+ * @brief 发送查询电机固件版本号指令（在motor_process_state中解析）
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机 ID
+ */
+void motor_get_version_send(port_t portx, const uint8_t id)
+{
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+
+    // for (uint8_t i = 0; i < 5; i++)
+    {
+        send_read_motor_version(fdcanHandle, id);
+    }
 }
 

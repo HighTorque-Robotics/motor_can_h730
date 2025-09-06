@@ -47,9 +47,8 @@ void timed_return_motor_status(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t
 void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
-
-
-void motor_read(FDCAN_HandleTypeDef *hfdcanx, uint8_t id);
+void send_read_motor_state(FDCAN_HandleTypeDef *hfdcanx, uint8_t id);
+void send_read_motor_version(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 
 #endif

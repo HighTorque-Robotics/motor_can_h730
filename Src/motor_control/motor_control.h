@@ -22,12 +22,11 @@ void motor_set_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id,
 void motor_set_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id,
                                    const float pos, const float vel, const float tqe, const float kp, const float kd);
 
-void motor_rezero_pos(port_t portx, const uint8_t id);
-void motor_get_state_send(port_t portx, const uint8_t id);
-void motor_get_version(port_t portx, const uint8_t id);
-
 void motor_set_stop(port_t portx, const uint8_t id);
 void motor_set_brake(port_t portx, const uint8_t id);
-void motor_set_reset(port_t portx, const uint8_t id);
+
+void motor_get_state_send(port_t portx, const uint8_t id);
+void motor_get_version_send(port_t portx, const uint8_t id);
+
 
 #endif
