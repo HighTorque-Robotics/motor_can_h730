@@ -11,31 +11,31 @@ uint8_t can_send(FDCAN_HandleTypeDef *hfdcanx, uint32_t id, uint8_t *msg, uint8_
     FDCAN_TxHeaderTypeDef TxHeader;
     uint8_t TxData[8] = {0};
 
-    TxHeader.Identifier = id;	//ÉèÖÃÀ©Õ¹ID
-    TxHeader.IdType = FDCAN_EXTENDED_ID; 	//Ê¹ÓÃÀ©Õ¹ID
-    TxHeader.TxFrameType = FDCAN_DATA_FRAME; //Êı¾İÖ¡
-    TxHeader.DataLength = FDCAN_DLC_BYTES_8; //Êı¾İ³¤¶È
-    TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;// ´íÎóÖ¸Ê¾×´Ì¬
-    TxHeader.BitRateSwitch = FDCAN_BRS_OFF; //±ÈÌØÂÊÇĞ»»¹Ø±Õ£¬²»ÊÊÓÃÓÚ¾­µäCAN
-    TxHeader.FDFormat = FDCAN_CLASSIC_CAN; //¾­µäCAN¸ñÊ½
-    TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;// ²»ÊÊÓÃ·¢ËÍÊÂ¼şFIFO
-    TxHeader.MessageMarker = 0; //ÏûÏ¢±ê¼Ç
+    TxHeader.Identifier = id;	//è®¾ç½®æ‰©å±•ID
+    TxHeader.IdType = FDCAN_EXTENDED_ID; 	//ä½¿ç”¨æ‰©å±•ID
+    TxHeader.TxFrameType = FDCAN_DATA_FRAME; //æ•°æ®å¸§
+    TxHeader.DataLength = FDCAN_DLC_BYTES_8; //æ•°æ®é•¿åº¦
+    TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;// é”™è¯¯æŒ‡ç¤ºçŠ¶æ€
+    TxHeader.BitRateSwitch = FDCAN_BRS_OFF; //æ¯”ç‰¹ç‡åˆ‡æ¢å…³é—­ï¼Œä¸é€‚ç”¨äºç»å…¸CAN
+    TxHeader.FDFormat = FDCAN_CLASSIC_CAN; //ç»å…¸CANæ ¼å¼
+    TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;// ä¸é€‚ç”¨å‘é€äº‹ä»¶FIFO
+    TxHeader.MessageMarker = 0; //æ¶ˆæ¯æ ‡è®°
 
 
-    //¸´ÖÆÊı¾İµ½·¢ËÍ»º³åÇø
+    //å¤åˆ¶æ•°æ®åˆ°å‘é€ç¼“å†²åŒº
     for(int i = 0; i < len; i++)
     {
         TxData[i] = msg[i];
     }
 
-    // ·¢ËÍCANÖ¸Áî
+    // å‘é€CANæŒ‡ä»¤
     if(HAL_FDCAN_AddMessageToTxFifoQ(hfdcanx, &TxHeader, TxData) != HAL_OK)
     {
-        // ·¢ËÍÊ§°Ü´¦Àí
+        // å‘é€å¤±è´¥å¤„ç†
         Error_Handler();
-        return 1; // ·µ»Ø·ÇÁãÖµÒÔ±íÊ¾·¢ËÍÊ§°Ü
+        return 1; // è¿”å›éé›¶å€¼ä»¥è¡¨ç¤ºå‘é€å¤±è´¥
     }
-    return 0; // ·¢ËÍ³É¹¦
+    return 0; // å‘é€æˆåŠŸ
 }
 
 void fdcan_filter_init(FDCAN_HandleTypeDef *fdcanHandle)
@@ -60,19 +60,73 @@ void fdcan_filter_init(FDCAN_HandleTypeDef *fdcanHandle)
     //HAL_FDCAN_Start(fdcanHandle);
 }
 
-uint8_t Fdcan_Dlc_To_Len(uint32_t dlc)
+uint8_t Fdcan_Dlc_To_Len(uint32_t size)
 {
-    uint8_t len = 0;
-    uint8_t tab_dlc_to_len[] = {12, 16, 20, 24, 32, 48, 64};
+    uint32_t fdcan_dlc = 0;
 
-    if (dlc <= FDCAN_DLC_BYTES_8)
+    if(size == 0)
     {
-        len = dlc >> 16;
+        fdcan_dlc = FDCAN_DLC_BYTES_0;
     }
-    else
+    else if(size <= 1)
     {
-        len = tab_dlc_to_len[(dlc >> 16) - 9];
+        fdcan_dlc = FDCAN_DLC_BYTES_1;
     }
-
-    return len;
+    else if(size <= 2)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_2;
+    }
+    else if(size <= 3)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_3;
+    }
+    else if(size <= 4)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_4;
+    }
+    else if(size <= 5)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_5;
+    }
+    else if(size <= 6)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_6;
+    }
+    else if(size <= 7)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_7;
+    }
+    else if(size <= 8)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_8;
+    }
+    else if(size <= 12)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_12;
+    }
+    else if(size <= 16)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_16;
+    }
+    else if(size <= 20)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_20;
+    }
+    else if(size <= 24)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_24;
+    }
+    else if(size <= 32)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_32;
+    }
+    else if(size <= 48)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_48;
+    }
+    else if(size <= 64)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_64;
+    }
+    return fdcan_dlc;
 }

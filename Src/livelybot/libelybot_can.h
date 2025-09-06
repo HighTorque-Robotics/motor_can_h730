@@ -4,7 +4,7 @@
 
 #include "main.h"
 
-/* NAN ±Ì æ≤ªœﬁ÷∆ */
+/* NAN Ë°®Á§∫‰∏çÈôêÂà∂ */
 #define  INI8_NAN   0x80
 #define  INT16_NAN  0x8000
 #define  INT32_NAN  0x80000000
@@ -33,8 +33,7 @@ extern uint8_t motor_read_flag;
 
 
 
-//uint8_t CAN_Send_Msg(FDCAN_HandleTypeDef *hfdcanx, uint32_t id, uint8_t *msg, uint8_t len);
-//void fdcan_filter_init(FDCAN_HandleTypeDef *fdcanHandle);
+
 
 void motor_control_volt(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vol);
 void motor_control_cur(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t cur);

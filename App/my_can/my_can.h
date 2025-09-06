@@ -13,7 +13,7 @@ extern uint8_t motor_read_flag;
 
 uint8_t can_send(FDCAN_HandleTypeDef *hfdcanx, uint32_t id, uint8_t *msg, uint8_t len);
 void fdcan_filter_init(FDCAN_HandleTypeDef *fdcanHandle);
-uint8_t Fdcan_Dlc_To_Len(uint32_t dlc);
+uint8_t Fdcan_Dlc_To_Len(uint32_t size);
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs);
 
 

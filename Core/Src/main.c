@@ -70,8 +70,7 @@ void SystemClock_Config(void);
 int main(void)
 {
     /* USER CODE BEGIN 1 */
-    uint32_t tick_500ms = 0;
-    uint32_t tick_1ms = 0;
+    uint32_t tick_100ms = 0;
     uint32_t tick_1000ms = 0;
     /* USER CODE END 1 */
 
@@ -109,24 +108,11 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-        if (HAL_GetTick() - tick_500ms >= 500)
+
+
+        if (HAL_GetTick() - tick_100ms >= 1)
         {
-            tick_500ms = HAL_GetTick();
-
-            motor_read(&hfdcan1, 1);
-            motor_read(&hfdcan2, 1);
-            motor_read(&hfdcan3, 1);
-        }
-
-        if (motor_read_flag == 1)
-        {
-            motor_read_flag = 0;
-
-        }
-
-        if (HAL_GetTick() - tick_1ms >= 1)
-        {
-            tick_1ms = HAL_GetTick();
+            tick_100ms = HAL_GetTick();
             test_motor_control(1);
 
         }
@@ -138,8 +124,10 @@ int main(void)
             tick_1000ms = HAL_GetTick();
             led_toggle();
 
-            motor_print_state();
+//            motor_print_state();
         }
+		
+		motor_process_state_all();
     }
     /* USER CODE END 3 */
 }

@@ -7,9 +7,9 @@
 
 
 /**
- * @brief DQµçÑ¹¿ØÖÆ
- * @param id µç»úID
- * @param vol QÏàµçÑ¹£¬µ¥Î»£º0.1v£¬Èç vol = 10 ±íÊ¾ Q ÏàµçÑ¹Îª 1V
+ * @brief DQç”µå‹æ§åˆ¶
+ * @param id ç”µæœºID
+ * @param vol Qç›¸ç”µå‹ï¼Œå•ä½ï¼š0.1vï¼Œå¦‚ vol = 10 è¡¨ç¤º Q ç›¸ç”µå‹ä¸º 1V
  */
 void motor_control_volt(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vol)
 {
@@ -22,9 +22,9 @@ void motor_control_volt(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vol)
 
 
 /**
- * @brief DQµçÁ÷¿ØÖÆ
- * @param id µç»úID
- * @param cur QÏàµçÁ÷£¬µ¥Î»£º0.1A£¬Èç cur = 10 ±íÊ¾ Q ÏàµçÑ¹Îª 1A
+ * @brief DQç”µæµæ§åˆ¶
+ * @param id ç”µæœºID
+ * @param cur Qç›¸ç”µæµï¼Œå•ä½ï¼š0.1Aï¼Œå¦‚ cur = 10 è¡¨ç¤º Q ç›¸ç”µå‹ä¸º 1A
  */
 void motor_control_cur(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t cur)
 {
@@ -37,10 +37,10 @@ void motor_control_cur(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t cur)
 
 
 /**
- * @brief Î»ÖÃ¿ØÖÆ
- * @param id  µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.0001 È¦£¬Èç pos = 5000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
- * @param tqe£º×î´óÁ¦¾Ø£ºµ¥Î»£º0.01 NM£¬Èç torque = 110 ±íÊ¾×î´óÁ¦¾ØÎª 1.1NM£¬²»Ïë¿ØÖÆÁ¦¾Ø½¨Òé¸øÖµ 0x8000 £¨±íÊ¾ÎŞÏŞÖÆ£©
+ * @brief ä½ç½®æ§åˆ¶
+ * @param id  ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.0001 åœˆï¼Œå¦‚ pos = 5000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
+ * @param tqeï¼šæœ€å¤§åŠ›çŸ©ï¼šå•ä½ï¼š0.01 NMï¼Œå¦‚ torque = 110 è¡¨ç¤ºæœ€å¤§åŠ›çŸ©ä¸º 1.1NMï¼Œä¸æƒ³æ§åˆ¶åŠ›çŸ©å»ºè®®ç»™å€¼ 0x8000 ï¼ˆè¡¨ç¤ºæ— é™åˆ¶ï¼‰
  */
 void motor_control_Pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t pos, int16_t tqe)
 {
@@ -54,10 +54,10 @@ void motor_control_Pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t pos, in
 
 
 /**
- * @brief ËÙ¶È¿ØÖÆ
- * @param id µç»úID
- * @param vel ËÙ¶È£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç val = 1000 ±íÊ¾ 0.25 ×ª/Ãë
- * @param tqe Á¦¾Ø£ºµ¥Î»£º0.01 NM£¬Èç torque = 110 ±íÊ¾×î´óÁ¦¾ØÎª 1.1NM£¬²»Ïë¿ØÖÆÁ¦¾Ø½¨Òé¸øÖµ 0x8000 £¨±íÊ¾ÎŞÏŞÖÆ£©
+ * @brief é€Ÿåº¦æ§åˆ¶
+ * @param id ç”µæœºID
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ val = 1000 è¡¨ç¤º 0.25 è½¬/ç§’
+ * @param tqe åŠ›çŸ©ï¼šå•ä½ï¼š0.01 NMï¼Œå¦‚ torque = 110 è¡¨ç¤ºæœ€å¤§åŠ›çŸ©ä¸º 1.1NMï¼Œä¸æƒ³æ§åˆ¶åŠ›çŸ©å»ºè®®ç»™å€¼ 0x8000 ï¼ˆè¡¨ç¤ºæ— é™åˆ¶ï¼‰
  */
 void motor_control_Vel(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vel, int16_t tqe)
 {
@@ -71,9 +71,9 @@ void motor_control_Vel(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vel, in
 
 
 /**
- * @brief Á¦¾ØÄ£Ê½
- * @param id µç»úID
- * @param tqe Á¦¾Ø£ºµ¥Î»£º0.01 NM£¬Èç torque = 110 ±íÊ¾Á¦¾ØÎª 1.1NM
+ * @brief åŠ›çŸ©æ¨¡å¼
+ * @param id ç”µæœºID
+ * @param tqe åŠ›çŸ©ï¼šå•ä½ï¼š0.01 NMï¼Œå¦‚ torque = 110 è¡¨ç¤ºåŠ›çŸ©ä¸º 1.1NM
  */
 void motor_control_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t tqe)
 {
@@ -86,11 +86,11 @@ void motor_control_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t tqe)
 
 
 /**
- * @brief µç»úÎ»ÖÃ-ËÙ¶È-Ç°À¡Á¦¾Ø(×î´óÁ¦¾Ø)¿ØÖÆ£¬int16ĞÍ
- * @param id  µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.0001 È¦£¬Èç pos = 5000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
- * @param val ËÙ¶È£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç val = 1000 ±íÊ¾ 0.25 ×ª/Ãë
- * @param tqe ×î´óÁ¦¾Ø£ºµ¥Î»£º0.01 NM£¬Èç torque = 110 ±íÊ¾×î´óÁ¦¾ØÎª 1.1NM£¬²»Ïë¿ØÖÆÁ¦¾Ø½¨Òé¸øÖµ 0x8000 £¨±íÊ¾ÎŞÏŞÖÆ£©
+ * @brief ç”µæœºä½ç½®-é€Ÿåº¦-å‰é¦ˆåŠ›çŸ©(æœ€å¤§åŠ›çŸ©)æ§åˆ¶ï¼Œint16å‹
+ * @param id  ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.0001 åœˆï¼Œå¦‚ pos = 5000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
+ * @param val é€Ÿåº¦ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ val = 1000 è¡¨ç¤º 0.25 è½¬/ç§’
+ * @param tqe æœ€å¤§åŠ›çŸ©ï¼šå•ä½ï¼š0.01 NMï¼Œå¦‚ torque = 110 è¡¨ç¤ºæœ€å¤§åŠ›çŸ©ä¸º 1.1NMï¼Œä¸æƒ³æ§åˆ¶åŠ›çŸ©å»ºè®®ç»™å€¼ 0x8000 ï¼ˆè¡¨ç¤ºæ— é™åˆ¶ï¼‰
  */
 void motor_control_pos_val_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t pos, int16_t val, int16_t tqe)
 {
@@ -105,23 +105,23 @@ void motor_control_pos_val_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t
 
 
 /**
- * @brief ½«µ±Ç°Î»ÖÃÉèÎªµç»úÁãÎ»(´ËÖ¸ÁîÖ»ÊÇÔÚ RAM ÖĞĞŞ¸Ä£¬»¹ĞèÅäºÏ `conf write` Ö¸Áî±£´æµ½ flash ÖĞ)
- * @param id µç»úID
+ * @brief å°†å½“å‰ä½ç½®è®¾ä¸ºç”µæœºé›¶ä½(æ­¤æŒ‡ä»¤åªæ˜¯åœ¨ RAM ä¸­ä¿®æ”¹ï¼Œè¿˜éœ€é…åˆ `conf write` æŒ‡ä»¤ä¿å­˜åˆ° flash ä¸­)
+ * @param id ç”µæœºID
  */
 void rezero_pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
 {
     uint8_t tdata[] = {0x40, 0x01, 0x04, 0x64, 0x20, 0x63, 0x0a};
 
     can_send(hfdcanx, 0x8000 | id, tdata, sizeof(tdata));
-    HAL_Delay(1000);  // ½¨ÒéÑÓÊ±1s
+    HAL_Delay(1000);  // å»ºè®®å»¶æ—¶1s
 
-    conf_write(hfdcanx, id);  // ±£´æÉèÖÃ
+    conf_write(hfdcanx, id);  // ä¿å­˜è®¾ç½®
 }
 
 
 /**
- * @brief ½«µç»ú RAM ÖĞÉèÖÃ±£´æµ½ flash ÖĞ(Ê¹ÓÃ´ËÖ¸Áîºó½¨Òé¸øµç»úÖØĞÂÉÏµç)
- * @param id µç»úID
+ * @brief å°†ç”µæœº RAM ä¸­è®¾ç½®ä¿å­˜åˆ° flash ä¸­(ä½¿ç”¨æ­¤æŒ‡ä»¤åå»ºè®®ç»™ç”µæœºé‡æ–°ä¸Šç”µ)
+ * @param id ç”µæœºID
  */
 void conf_write(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
 {
@@ -132,9 +132,9 @@ void conf_write(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
 
 
 /**
- * @brief ÖÜÆÚ·µ»Øµç»úÎ»ÖÃ¡¢ËÙ¶È¡¢Á¦¾ØÊı¾İ(·µ»ØÊı¾İ¸ñÊ½ºÍÊ¹ÓÃ 0x17£¬0x01 Ö¸Áî»ñÈ¡µÄ¸ñÊ½Ò»Ñù)
- * @param id µç»úID
- * @param t ·µ»ØÖÜÆÚ£¨µ¥Î»£ºms£©
+ * @brief å‘¨æœŸè¿”å›ç”µæœºä½ç½®ã€é€Ÿåº¦ã€åŠ›çŸ©æ•°æ®(è¿”å›æ•°æ®æ ¼å¼å’Œä½¿ç”¨ 0x17ï¼Œ0x01 æŒ‡ä»¤è·å–çš„æ ¼å¼ä¸€æ ·)
+ * @param id ç”µæœºID
+ * @param t è¿”å›å‘¨æœŸï¼ˆå•ä½ï¼šmsï¼‰
  */
 void timed_return_motor_status(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t t_ms)
 {
@@ -147,9 +147,9 @@ void timed_return_motor_status(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t
 
 
 /**
- * @brief µç»úÍ£Ö¹£¬×¢Òâ£ºĞèÈÃµç»úÍ£Ö¹ºóÔÙÖØÖÃÁãÎ»£¬·ñÔòÎŞĞ§
+ * @brief ç”µæœºåœæ­¢ï¼Œæ³¨æ„ï¼šéœ€è®©ç”µæœºåœæ­¢åå†é‡ç½®é›¶ä½ï¼Œå¦åˆ™æ— æ•ˆ
  * @param fdcanHandle &hfdcanx
- * @param motor id µç»úID
+ * @param motor id ç”µæœºID
  */
 void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
@@ -160,9 +160,9 @@ void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief µç»úÉ²³µ
+ * @brief ç”µæœºåˆ¹è½¦
  * @param fdcanHandle &hfdcanx
- * @param motor id µç»úID
+ * @param motor id ç”µæœºID
  */
 void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
@@ -173,8 +173,8 @@ void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief ¶ÁÈ¡µç»úÎ»ÖÃ¡¢ËÙ¶È¡¢Á¦¾ØÖ¸Áî
- * @param id µç»úID
+ * @brief è¯»å–ç”µæœºä½ç½®ã€é€Ÿåº¦ã€åŠ›çŸ©æŒ‡ä»¤
+ * @param id ç”µæœºID
  */
 void motor_read(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
 {

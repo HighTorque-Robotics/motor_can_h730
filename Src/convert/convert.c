@@ -62,8 +62,6 @@ static float data_float2int(const float in_data, const data_type_t type, const f
     {
         switch (type)
         {
-        // case TINT8:
-        //     return NAN_INT8;
         case TINT16:
             return NAN_INT16;
         case TINT32:
@@ -78,8 +76,6 @@ static float data_float2int(const float in_data, const data_type_t type, const f
 
     switch (type)
     {
-    // case TINT8:
-    //     return data_limit(in_data * rint8, 127.0f, -128.0f);
     case TINT16:
         return data_limit(in_data * rint16, 32767.0f, -32768.0f);
     case TINT32:
@@ -97,8 +93,6 @@ static float data_int2float(const float in_data, const data_type_t type, const f
 {
     switch (type)
     {
-    // case (TINT8):
-    //     return in_data / rint8;
     case (TINT16):
         return in_data / rint16;
     case (TINT32):
