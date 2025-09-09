@@ -3,7 +3,6 @@
 
 
 #include "main.h"
-#include "libelybot_can.h"
 
 uint32_t get_fdcan_dlc(uint16_t size);
 uint16_t get_fdcan_data_size(uint32_t dlc);

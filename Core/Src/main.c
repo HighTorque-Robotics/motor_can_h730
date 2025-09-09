@@ -103,6 +103,8 @@ int main(void)
     can_filter_init(&hfdcan1);
     can_filter_init(&hfdcan2);
     can_filter_init(&hfdcan3);
+
+    // motor_set_timed_return_status_send(PORT1, 1, 10);
     /* USER CODE END 2 */
 
     /* Infinite loop */

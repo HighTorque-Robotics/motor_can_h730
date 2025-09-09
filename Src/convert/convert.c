@@ -25,22 +25,6 @@ const motor_tqe_adj_t motor_tqe_adj[MOTOR_TYPE_COUNT] =
 };
 
 
-
-static int16_t int16_limit(const int32_t data)
-{
-    if (data >= 32700)
-    {
-        return (int16_t)32700;
-    }
-    else if (data <= -32700)
-    {
-        return (int16_t) - 32700;
-    }
-
-    return (int16_t)data;
-}
-
-
 static float data_limit(const float in_data, const float max, const float min)
 {
     if (in_data >= max)
@@ -77,9 +61,9 @@ static float data_float2int(const float in_data, const data_type_t type, const f
     switch (type)
     {
     case TINT16:
-        return data_limit(in_data * rint16, 32767.0f, -32768.0f);
+        return data_limit(in_data * rint16, 32760.0f, -32760.0f);
     case TINT32:
-        return data_limit(in_data * rint32, 2147483647.0f, -2147483648.0f);
+        return data_limit(in_data * rint32, 2147483640.0f, -2147483640.0f);
     case TFLOAT:
         return in_data;
     default:
@@ -314,6 +298,12 @@ float pid_int2float(const float in_data, const data_type_t type)
 }
 
 
+uint16_t mit_float2int(float x, float x_min, float x_max, unsigned int bits)
+{
+    float span = x_max - x_min;
+    
+    return (uint16_t)((x- x_min) * ((float)((1 << bits) / span)));
+}
 
 
 void my_memcpy(void *p1, const void *p2, const int16_t len)

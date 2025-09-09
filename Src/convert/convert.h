@@ -97,6 +97,8 @@ float tqe_float2int(const float in_data, const data_type_t type);
 float acc_float2int(const float in_data, const data_type_t type);
 float pid_float2int(const float in_data, const data_type_t type);
 
+uint16_t mit_float2int(float x, float x_min, float x_max, unsigned int bits);
+
 
 /* 读取电机用 */
 float conv_from_turns(const float in_data, const pos_vel_type_t type);

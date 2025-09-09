@@ -143,7 +143,7 @@ static uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 }
 
 
-uint8_t motor_get_model2(port_t portx, uint8_t id)
+motor_type_t motor_get_model2(port_t portx, uint8_t id)
 {
     if (id < 0 || id > MOTOR_MAX_NUM)
     {
