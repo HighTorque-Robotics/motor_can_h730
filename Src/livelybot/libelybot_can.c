@@ -145,7 +145,7 @@ void motor_control_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, i
     tdata[6] = (kp >> 8) & 0x0f | ((kd & 0x0f) << 4);
     tdata[7] = kd >> 4;
 
-    can_send(hfdcanx, 0x18000 | id, tdata, sizeof(tdata));
+    can_send(hfdcanx, 0x10000 | id, tdata, sizeof(tdata));
 }
 
 

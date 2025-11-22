@@ -159,23 +159,28 @@ void motor_set_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const motor_type_t model = motor_get_model2(portx, id);
-    const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+
+    /* 将单位转换成转 */
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
     const float kp_turns = conv_from_turns(kp, MOTOR_DATA_TYPE_FLAG);
     const float kd_turns = conv_from_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
-    const float tqe1 = tqe_adjust(tqe, model);
-    const float kp1 = pid_adjust(kp_turns, model);
-    const float kd1 = pid_adjust(kd_turns, model);
+    /* 力矩修正 */
+    const float tqe_val_adjust = tqe_adjust(tqe, model);
+    const float kp_val_adjust = pid_adjust(kp_turns, model);
+    const float kd_val_adjust = pid_adjust(kd_turns, model);
 
-    const uint16_t pos2 = mit_float2int(pos, -3.2768f, 3.2767f, 16);
-    const uint16_t vel2 = mit_float2int(vel, -2.0f, 2.0f, 12);
-    const uint16_t tqe2 = mit_float2int(tqe, -10.0f, 10.0f, 12);
-    const uint16_t kp2 = mit_float2int(kp1, -400, 400, 12);
-    const uint16_t kd2 = mit_float2int(kd1, -100, 100, 12); 
+    /* float -> int */
+    const uint16_t pos_int = mit_float2int(pos_turns, -3.2768f, 3.2767f, 16);
+    const uint16_t vel_int = mit_float2int(vel_turns, -2.0f, 2.0f, 12);
+    const uint16_t tqe_int = mit_float2int(tqe_val_adjust, -10.0f, 10.0f, 12);
+    const uint16_t kp_int = mit_float2int(kp_val_adjust, -400, 400, 12);
+    const uint16_t kd_int = mit_float2int(kd_val_adjust, -100, 100, 12); 
 
-    motor_control_pos_vel_tqe_kp_kd(fdcanHandle, id, pos2, vel2, tqe2, kp2, kd2);
+    motor_control_pos_vel_tqe_kp_kd(fdcanHandle, id, pos_int, vel_int, tqe_int, kp_int, kd_int);
 }
+
 
 /**
  * @brief 停止模式，电机三相都断开（并让电机返回状态信息）
