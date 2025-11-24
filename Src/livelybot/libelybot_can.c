@@ -4,6 +4,7 @@
 
 /**
  * @brief DQ电压控制
+ * @param hfdcanx &hfdcanx
  * @param id 电机ID
  * @param vol Q相电压，单位：0.1v，如 vol = 10 表示 Q 相电压为 1V
  */
@@ -20,6 +21,7 @@ void motor_control_volt(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vol)
 
 /**
  * @brief DQ电流控制
+ * @param hfdcanx &hfdcanx
  * @param id 电机ID
  * @param cur Q相电流，单位：0.1A，如 cur = 10 表示 Q 相电压为 1A
  */
@@ -36,6 +38,7 @@ void motor_control_cur(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t cur)
 
 /**
  * @brief 位置控制
+ * @param hfdcanx &hfdcanx
  * @param id  电机ID
  * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。
  * @param tqe：最大力矩：单位：0.01 NM，如 torque = 110 表示最大力矩为 1.1NM，不想控制力矩建议给值 0x8000 （表示无限制）
@@ -55,6 +58,7 @@ void motor_control_pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t pos, in
 
 /**
  * @brief 速度控制
+ * @param hfdcanx &hfdcanx
  * @param id 电机ID
  * @param vel 速度：单位 0.00025 转/秒，如 val = 1000 表示 0.25 转/秒
  * @param tqe 力矩：单位：0.01 NM，如 torque = 110 表示最大力矩为 1.1NM，不想控制力矩建议给值 0x8000 （表示无限制）
@@ -74,6 +78,7 @@ void motor_control_vel(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vel, in
 
 /**
  * @brief 力矩模式
+ * @param hfdcanx &hfdcanx
  * @param id 电机ID
  * @param tqe 力矩：单位：0.01 NM，如 torque = 110 表示力矩为 1.1NM
  */
@@ -90,6 +95,7 @@ void motor_control_tqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int32_t tqe)
 
 /**
  * @brief 电机位置-速度-最大力矩，int16型
+ * @param hfdcanx &hfdcanx
  * @param id  电机ID
  * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。
  * @param val 速度：单位 0.00025 转/秒，如 val = 1000 表示 0.25 转/秒
@@ -112,6 +118,7 @@ void motor_control_pos_vel_MAXtqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int1
 
 /**
  * @brief 梯形控制（电机固件 v4.6.0 开始支持）
+ * @param hfdcanx &hfdcanx
  * @param id  电机ID
  * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。
  * @param val 速度：单位 0.00025 转/秒，如 val = 1000 表示 0.25 转/秒
@@ -130,7 +137,14 @@ void motor_control_pos_vel_acc(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t
 
 
 /**
- * @brief 运控模式（MIT模式），电机固件 v4.6.0 开始支持
+ * @brief 运控模式 int16 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)（电机固件 v4.6.0 开始支持）
+ * @param hfdcanx &hfdcanx
+ * @param id 电机ID
+ * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。
+ * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
+ * @param tqe 前馈力矩（单位见文档）
+ * @param kp Mkp = kp * 0.1 (Mkp 表示电机内部 kp)
+ * @param kd Mkd = kp * 0.1 (Mkd 表示电机内部 kd)
  */
 void motor_control_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
 {
@@ -151,6 +165,7 @@ void motor_control_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, i
 
 /**
  * @brief 将当前位置设为电机零位(此指令只是在 RAM 中修改，还需配合 `conf write` 指令保存到 flash 中)
+ * @param hfdcanx &hfdcanx
  * @param id 电机ID
  */
 void rezero_pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
@@ -163,6 +178,7 @@ void rezero_pos(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
 
 /**
  * @brief 将电机 RAM 中设置保存到 flash 中(使用此指令后建议给电机重新上电)
+ * @param hfdcanx &hfdcanx
  * @param id 电机ID
  */
 void conf_write(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
@@ -175,6 +191,7 @@ void conf_write(FDCAN_HandleTypeDef *hfdcanx, uint8_t id)
 
 /**
  * @brief 周期返回电机位置、速度、力矩数据(返回数据格式和使用 0x17，0x01 指令获取的格式一样)
+ * @param hfdcanx &hfdcanx
  * @param id 电机ID
  * @param t 返回周期（单位：ms）
  */

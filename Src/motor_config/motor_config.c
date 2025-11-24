@@ -31,7 +31,7 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
 
 /**
  * @brief 重置电机零位
- * @param fdcanHandle &hfdcanx
+ * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  * @return 0-成功，1-重置零位失败，2-保存失败
  */
@@ -62,7 +62,7 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
 
 /**
  * @brief 保存电机设置
- * @param fdcanHandle &hfdcanx
+ * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  * @return 0-成功，1-失败
  */
