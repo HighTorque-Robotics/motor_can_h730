@@ -12,9 +12,9 @@
 void motor_set_dq_vlot(port_t portx, const uint8_t id, const float volt)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float temp = vol_float2int(volt, TINT16);
+    const float volt_raw = vol_float2int(volt, TINT16);
 
-    motor_control_volt(fdcanHandle, id, temp);
+    motor_control_volt(fdcanHandle, id, volt_raw);
 
 }
 
@@ -27,9 +27,9 @@ void motor_set_dq_vlot(port_t portx, const uint8_t id, const float volt)
 void motor_set_dq_current(port_t portx, const uint8_t id, const float cur)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float temp = cur_float2int(cur, TINT16);
+    const float cur_raw = cur_float2int(cur, TINT16);
 
-    motor_control_cur(fdcanHandle, id, temp);
+    motor_control_cur(fdcanHandle, id, cur_raw);
 
 }
 
@@ -42,10 +42,10 @@ void motor_set_dq_current(port_t portx, const uint8_t id, const float cur)
 void motor_set_pos(port_t portx, const uint8_t id, const float pos)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float temp1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float temp2 = pos_float2int(temp1, TINT16);
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float pos_raw = pos_float2int(pos_turns, TINT16);
 
-    motor_control_pos(fdcanHandle, id, temp2, INT16_NAN);
+    motor_control_pos(fdcanHandle, id, pos_raw, INT16_NAN);
 
 }
 
@@ -58,10 +58,13 @@ void motor_set_pos(port_t portx, const uint8_t id, const float pos)
 void motor_set_vel(port_t portx, const uint8_t id, const float vel)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float temp1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float temp2 = vel_float2int(temp1, TINT16);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float vel_raw = vel_float2int(vel_turns, TINT16);
 
-    motor_control_vel(fdcanHandle, id, temp2, INT16_NAN);
+    motor_control_vel(fdcanHandle, id, vel_raw, INT16_NAN);
+
+
+
 
 }
 
@@ -74,10 +77,10 @@ void motor_set_vel(port_t portx, const uint8_t id, const float vel)
 void motor_set_tqe(port_t portx, const uint8_t id, const float tqe)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float temp1 = tqe_adjust(tqe, motor_get_model2(portx, id));
-    const float temp2 = tqe_float2int(temp1, TINT16);
+    const float tqe_val_adjust = tqe_adjust(tqe, motor_get_model2(portx, id));
+    const float tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
 
-    motor_control_tqe(fdcanHandle, id, temp2);
+    motor_control_tqe(fdcanHandle, id, tqe_raw);
 
 }
 
@@ -92,12 +95,12 @@ void motor_set_tqe(port_t portx, const uint8_t id, const float tqe)
 void motor_set_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float pos2 = pos_float2int(pos1, TINT16);
-    const float vel2 = vel_float2int(vel1, TINT16);
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float pos_raw = pos_float2int(pos_turns, TINT16);
+    const float vel_raw = vel_float2int(vel_turns, TINT16);
 
-    motor_control_pos_vel_MAXtqe(fdcanHandle, id, pos2, vel2, INT16_NAN);
+    motor_control_pos_vel_MAXtqe(fdcanHandle, id, pos_raw, vel_raw, INT16_NAN);
 }
 
 
@@ -112,14 +115,14 @@ void motor_set_pos_vel(port_t portx, const uint8_t id, const float pos, const fl
 void motor_set_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe1 = tqe_adjust(tqe, motor_get_model2(portx, id));
-    const float pos2 = pos_float2int(pos1, TINT16);
-    const float vel2 = vel_float2int(vel1, TINT16);
-    const float tqe2 = tqe_float2int(tqe1, TINT16);
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float tqe_val_adjust = tqe_adjust(tqe, motor_get_model2(portx, id));
+    const float pos_raw = pos_float2int(pos_turns, TINT16);
+    const float vel_raw = vel_float2int(vel_turns, TINT16);
+    const float tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
 
-    motor_control_pos_vel_MAXtqe(fdcanHandle, id, pos2, vel2, tqe2);
+    motor_control_pos_vel_MAXtqe(fdcanHandle, id, pos_raw, vel_raw, tqe_raw);
 }
 
 
@@ -134,14 +137,14 @@ void motor_set_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, c
 void motor_set_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float acc1 = conv_to_turns(acc, MOTOR_DATA_TYPE_FLAG);
-    const float pos2 = pos_float2int(pos1, TINT16);
-    const float vel2 = vel_float2int(vel1, TINT16);
-    const float acc2 = acc_float2int(acc1, TINT16);
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float acc_turns = conv_to_turns(acc, MOTOR_DATA_TYPE_FLAG);
+    const float pos_raw = pos_float2int(pos_turns, TINT16);
+    const float vel_raw = vel_float2int(vel_turns, TINT16);
+    const float acc_raw = acc_float2int(acc_turns, TINT16);
 
-    motor_control_pos_vel_acc(fdcanHandle, id, pos2, vel2, acc2);
+    motor_control_pos_vel_acc(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
 }
 
 
@@ -172,13 +175,13 @@ void motor_set_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos
     const float kd_val_adjust = pid_adjust(kd_turns, model);
 
     /* float -> int */
-    const uint16_t pos_int = mit_float2int(pos_turns, -3.2768f, 3.2767f, 16);
-    const uint16_t vel_int = mit_float2int(vel_turns, -2.0f, 2.0f, 12);
-    const uint16_t tqe_int = mit_float2int(tqe_val_adjust, -10.0f, 10.0f, 12);
-    const uint16_t kp_int = mit_float2int(kp_val_adjust, -400, 400, 12);
-    const uint16_t kd_int = mit_float2int(kd_val_adjust, -100, 100, 12); 
+    const uint16_t pos_raw = mit_float2int(pos_turns, -3.2768f, 3.2767f, 16);
+    const uint16_t vel_raw = mit_float2int(vel_turns, -2.0f, 2.0f, 12);
+    const uint16_t tqe_raw = mit_float2int(tqe_val_adjust, -10.0f, 10.0f, 12);
+    const uint16_t kp_raw = mit_float2int(kp_val_adjust, -400, 400, 12);
+    const uint16_t kd_raw = mit_float2int(kd_val_adjust, -100, 100, 12); 
 
-    motor_control_pos_vel_tqe_kp_kd(fdcanHandle, id, pos_int, vel_int, tqe_int, kp_int, kd_int);
+    motor_control_pos_vel_tqe_kp_kd(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
 }
 
 
