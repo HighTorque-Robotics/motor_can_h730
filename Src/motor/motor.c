@@ -213,8 +213,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         const float tqe_temp = tqe_int2float(tqe, TINT16);
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
     }
-    else if (len == 7 && p_data[0] == 0x41 && p_data[1] == 0x01 && p_data[2] == 0x04  // 设置信息解析
-             && p_data[3] == 0x4F && p_data[4] == 0x4B && p_data[5] == 0x0D && p_data[6] == 0x0A)
+    else if (len == 0 || (len == 7 && p_data[0] == 0x41 && p_data[1] == 0x01 && p_data[2] == 0x04  // 设置信息解析
+             && p_data[3] == 0x4F && p_data[4] == 0x4B && p_data[5] == 0x0D && p_data[6] == 0x0A))
     {
         p_motor_state[id_index].ack = 1;
     }
@@ -251,13 +251,10 @@ void motor_process_state_all()
     {
         while (HAL_FDCAN_GetRxMessage(port_maping[i].fdcan, FDCAN_RX_FIFO0, &fdcan_rx_header, fdcan_rdata) == HAL_OK)
         {
-            if (fdcan_rx_header.DataLength != 0)
+            const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
+            if (len <= 8)
             {
-                const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
-				if (len <= 8)
-				{
-					motor_process_state(port_maping[i].fdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
-				}
+                motor_process_state(port_maping[i].fdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
             }
         }
     }

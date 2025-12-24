@@ -5,24 +5,24 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
 {
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
     const uint8_t id_index = id - 1;
-    uint16_t t = 0;
-    const uint16_t t_max = 10;
+    uint8_t flag = 0;
 
     p_motor_state[id_index].ack = 0;
     for (int i = 0; i < 10; i++)
     {
-        rezero_pos(fdcanHandle, id);
+        action(fdcanHandle, id);
         HAL_Delay(100);
         motor_process_state_all();
         if (p_motor_state[id_index].ack != 0)
         {
+            flag = 1;
             break;
         }
+    }
 
-        if (++t > t_max)
-        {
-            return 1;
-        }
+    if (flag == 0)
+    {
+        return 1;
     }
 
     return 0;
