@@ -5,7 +5,7 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
 {
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
     const uint8_t id_index = id - 1;
-    uint8_t flag = 0;
+    uint8_t flag = 1;
 
     p_motor_state[id_index].ack = 0;
     for (int i = 0; i < 10; i++)
@@ -15,17 +15,12 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
         motor_process_state_all();
         if (p_motor_state[id_index].ack != 0)
         {
-            flag = 1;
+            flag = 0;
             break;
         }
     }
 
-    if (flag == 0)
-    {
-        return 1;
-    }
-
-    return 0;
+    return flag;
 }
 
 
