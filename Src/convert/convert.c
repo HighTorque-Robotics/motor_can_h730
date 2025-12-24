@@ -18,9 +18,9 @@ const motor_tqe_adj_t motor_tqe_adj[MOTOR_TYPE_COUNT] =
     [M5047_09] = {0.533000f, 0.0f},
     [M5047_36] = {0.803000f, 0.0f},
     [M6056_36] = {0.677000f, 0.0f},
-    [M7256_35] = {0.677000f, 0.0f},  
-    [M60SG_35] = {0.794200f, 0.0f},  
-    [M60BM_35] = {0.794200f, 0.0f}, 
+    [M7256_35] = {0.677000f, 0.0f},
+    [M60SG_35] = {0.794200f, 0.0f},
+    [M60BM_35] = {0.794200f, 0.0f},
     [MGENERAL] = {0.5f, 0.0f},
 };
 
@@ -301,8 +301,8 @@ float pid_int2float(const float in_data, const data_type_t type)
 uint16_t mit_float2int(float x, float x_min, float x_max, unsigned int bits)
 {
     float span = x_max - x_min;
-    
-    return (uint16_t)((x- x_min) * ((float)((1 << bits) / span)));
+
+    return (uint16_t)((x - x_min) * ((float)((1 << bits) / span)));
 }
 
 

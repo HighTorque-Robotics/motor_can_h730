@@ -179,7 +179,7 @@ void motor_set_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos
     const uint16_t vel_raw = mit_float2int(vel_turns, -2.0f, 2.0f, 12);
     const uint16_t tqe_raw = mit_float2int(tqe_val_adjust, -10.0f, 10.0f, 12);
     const uint16_t kp_raw = mit_float2int(kp_val_adjust, -400, 400, 12);
-    const uint16_t kd_raw = mit_float2int(kd_val_adjust, -100, 100, 12); 
+    const uint16_t kd_raw = mit_float2int(kd_val_adjust, -100, 100, 12);
 
     motor_control_pos_vel_tqe_kp_kd(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
 }

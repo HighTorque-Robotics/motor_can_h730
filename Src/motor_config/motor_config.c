@@ -73,7 +73,7 @@ uint8_t motor_conf_write(port_t portx, const uint8_t id)
     {
         return 1;
     }
-    
+
     HAL_Delay(100);
 
     return 0;

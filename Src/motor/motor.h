@@ -4,7 +4,7 @@
 
 
 
-#define  MOTOR_PORT_NUM  1  // 使用 CAN 通道数量  
+#define  MOTOR_PORT_NUM  2  // 使用 CAN 通道数量  
 #define  MOTOR_MAX_NUM   1  // 单个 CAN 通道所连接的最大电机数量
 
 

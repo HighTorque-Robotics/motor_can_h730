@@ -2,7 +2,7 @@
 
 
 
-FDCAN_TxHeaderTypeDef TxHeader = 
+FDCAN_TxHeaderTypeDef TxHeader =
 {
     .TxFrameType = FDCAN_DATA_FRAME,            // 数据帧
     .ErrorStateIndicator = FDCAN_ESI_ACTIVE,    // 错误指示状态
