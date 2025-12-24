@@ -125,8 +125,8 @@ int main(void)
 
             motor_print_state();
         }
-		
-		motor_process_state_all();
+
+        motor_process_state_all();
     }
     /* USER CODE END 3 */
 }

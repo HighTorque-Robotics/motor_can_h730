@@ -37,7 +37,7 @@ void test_motor_control(const uint8_t id)
     case 8:
         motor_set_pos_vel_tqe_kp_kd(portx, id, 1, 0.1, 0, 1, 0.1);
         break;
-    
+
     case 9:
         motor_set_stop(portx, id);
         break;
