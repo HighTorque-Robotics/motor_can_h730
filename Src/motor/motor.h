@@ -69,6 +69,6 @@ void motor_process_state_all(void);
 
 
 
-#define  MOTOR_SDK_VERSION   "2.1.2"
+#define  MOTOR_SDK_VERSION   "2.1.3"
 
 #endif
