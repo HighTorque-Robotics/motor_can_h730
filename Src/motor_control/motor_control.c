@@ -174,6 +174,11 @@ void motor_set_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos
     const float kp_val_adjust = pid_adjust(kp_turns, model);
     const float kd_val_adjust = pid_adjust(kd_turns, model);
 
+    printf("tqe: %f,kp_turns :%f, kd_turns: %f\r\n",tqe,kp_turns,kd_turns);
+	printf("tqe_val_adjust:%f,kp_val_adjust:%f, kd_val_adjust:%f\r\n",tqe_val_adjust,kp_val_adjust,kd_val_adjust);
+	printf("K1:%f,k2:%f,k3:%f\r\n",tqe/tqe_val_adjust,kp_turns/kp_val_adjust,kd_turns/kd_val_adjust);
+
+
     /* float -> int */
     const uint16_t pos_raw = mit_float2int(pos_turns, -3.2768f, 3.2767f, 16);
     const uint16_t vel_raw = mit_float2int(vel_turns, -2.0f, 2.0f, 12);
