@@ -46,33 +46,25 @@ typedef enum  // 数据类型
 } data_type_t;
 
 
-typedef enum  // 电机型号
+typedef enum __attribute__((packed)) // 电机型号
 {
     MNULL = 0,
-    //旧名称
+
+    /* 旧名称 */
     M3536_32,
-    // M4438_08,
-    // M4438_16,
     M4438_30,
     M4438_32,
     M4538_19,
     M5043_20,
-    // M5043_35,
     M5046_20,
     M5047_09,
-    // M5047_19,
-    // M5047_20,
-    // M5047_30,
     M5047_36,
-    // M6056_08,
     M6056_36,
-    // M6057_36,
-    // M7136_07,
-    // M7233_08,
     M7256_35,
     M60SG_35,
     M60BM_35,
-    //新名称
+
+    /* 新名称 */
     M3508_02,
     M3516_02,
     M3532_02,
@@ -85,9 +77,11 @@ typedef enum  // 电机型号
     M3532_02_8353,
     M4530_02_8353,
     M5036_02_8353,
+
     MGENERAL,  // 无修正
+    MNONE,
     MOTOR_TYPE_COUNT,  // 电机类型数量
-} motor_type_t;
+} __attribute__((packed)) motor_type_t;
 
 
 typedef struct

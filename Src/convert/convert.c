@@ -9,6 +9,8 @@
 const motor_tqe_adj_t motor_tqe_adj[MOTOR_TYPE_COUNT] =
 {
     [MNULL] = {0.0f, 0.0f},
+
+    /* 新名称 */
     [M3536_32] = {0.35f, 0.0f},
     [M4438_30] = {0.64f, 0.0f},
     [M4438_32] = {0.64f, 0.0f},
@@ -17,7 +19,8 @@ const motor_tqe_adj_t motor_tqe_adj[MOTOR_TYPE_COUNT] =
     [M6056_36] = {0.66f, 0.0f},
     [M7256_35] = {0.66f, 0.0f},  
     [M60BM_35] = {0.64f, 0.0f}, 
-    //新名称
+    
+    /* 新名称 */
     [M3508_02] = {0.37f, 0.0f},
     [M3516_02] = {0.37f, 0.0f},
     [M3532_02] = {0.37f, 0.0f},
@@ -30,6 +33,7 @@ const motor_tqe_adj_t motor_tqe_adj[MOTOR_TYPE_COUNT] =
     [M3532_02_8353] = {0.61f, 0.0f},
     [M4530_02_8353] = {0.64f, 0.0f},
     [M5036_02_8353] = {0.70f, 0.0f},
+
     [MGENERAL] = {0.65f, 0.0f},
     [MNONE] = {1.0f, 0.0f},
 };
