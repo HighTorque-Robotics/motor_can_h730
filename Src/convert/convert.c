@@ -314,9 +314,23 @@ float pid_int2float(const float in_data, const data_type_t type)
 
 uint16_t mit_float2int(float x, float x_min, float x_max, unsigned int bits)
 {
-    float span = x_max - x_min;
+    const float span = x_max - x_min;
+    uint16_t r = 0;
 
-    return (uint16_t)((x - x_min) * ((float)((1 << bits) / span)));
+    if (x <= x_min)
+    {
+        r = 0;
+    }
+    else if (x >= x_max)
+    {
+        r = (1 << bits);
+    }
+    else
+    {
+        r = (x - x_min) * ((float)((1 << bits) / span));
+    }
+
+    return r;
 }
 
 
