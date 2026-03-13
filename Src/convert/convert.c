@@ -323,7 +323,7 @@ uint16_t mit_float2int(float x, float x_min, float x_max, unsigned int bits)
     }
     else if (x >= x_max)
     {
-        r = (1 << bits);
+        r = (1 << bits) - 1;
     }
     else
     {
