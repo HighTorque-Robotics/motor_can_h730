@@ -125,6 +125,23 @@ void motor_set_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, c
     motor_control_pos_vel_MAXtqe(fdcanHandle, id, pos_raw, vel_raw, tqe_raw);
 }
 
+/**
+ * @brief 速度、加速度模式（电机固件 v4.11.0 开始支持）
+ * @param portx CAN 通道选择，用于指定通信的 CAN 端口
+ * @param id 电机 ID
+ * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param acc 目标加速度，单位可为转每秒平方（rev/s^2）、弧度每秒平方（rad/s^2）、或度每秒平方（°/s^2），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
+void motor_set_vel_acc(port_t portx, const uint8_t id, const float vel, const float acc)
+{
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float acc_turns = conv_to_turns(acc, MOTOR_DATA_TYPE_FLAG);
+    const float vel_raw = vel_float2int(vel_turns, TINT16);
+    const float acc_raw = acc_float2int(acc_turns, TINT16);
+
+    motor_control_vel_acc(fdcanHandle, id, vel_raw, acc_raw);
+}
 
 /**
  * @brief 位置、速度、加速度模式（梯形控制）（电机固件 v4.6.0 开始支持）

@@ -117,6 +117,23 @@ void motor_control_pos_vel_MAXtqe(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int1
 
 
 /**
+ * @brief 速度加速度控制（电机固件 v4.11.0 开始支持）
+ * @param hfdcanx &hfdcanx
+ * @param id  电机ID
+ * @param val 速度：单位 0.00025 转/秒，如 val = 1000 表示 0.25 转/秒
+ * @param acc 加速度：单位 0.01 转/秒^2，如 vel = 40 表示 0.4 转/秒^2
+ */
+void motor_control_vel_acc(FDCAN_HandleTypeDef *hfdcanx, uint8_t id, int16_t vel, int16_t acc)
+{
+    static uint8_t tdata[] = {0x06, 0x91, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    my_memcpy(&tdata[3], &vel, sizeof(int16_t));
+    my_memcpy(&tdata[5], &acc, sizeof(int16_t));
+
+    can_send(hfdcanx, id, tdata, sizeof(tdata));
+}
+
+/**
  * @brief 梯形控制（电机固件 v4.6.0 开始支持）
  * @param hfdcanx &hfdcanx
  * @param id  电机ID
