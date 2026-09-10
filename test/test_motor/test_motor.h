@@ -5,6 +5,7 @@
 
 #include "motor_control.h"
 #include "fdcan.h"
+#include "motor_config.h"
 
 
 void test_motor_control(const uint8_t id);

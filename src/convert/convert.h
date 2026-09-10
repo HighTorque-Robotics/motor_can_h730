@@ -9,6 +9,8 @@
 
 #define  MOTOR_DATA_TYPE_FLAG  TURNS
 #define  BROADCAST_ID  0x7F
+#define  MOTOR_ID_MIN  1                    // 电机 ID 下限
+#define  MOTOR_ID_MAX  (BROADCAST_ID - 1)   // 电机 ID 上限 = 126 (127 为广播地址, 不可作为电机 ID)
 
 
 #ifdef  LED_ERR_FLAG  // 这个宏定义在 led.h 中
@@ -22,13 +24,6 @@ static inline void MOTOR_ERR(void) {}
 #define MY_PI  (3.14159265358f)
 
 
-/* 各个数据类型的无限制 */
-#define  NAN_FLOAT  NAN
-#define  NAN_INT32  0x80000000
-#define  NAN_INT16  0x8000
-#define  NAN_INT8   0x80
-
-
 typedef enum
 {
     RADIAN_2PI = 0,  // 弧度制
@@ -37,66 +32,17 @@ typedef enum
 } pos_vel_type_t;
 
 
-typedef enum  // 数据类型
+typedef enum __packed  // 数据类型 (枚举值 = CAN ID bits[17:16])
 {
-    TFLOAT = 0,
-    TINT32,
-    TINT16,
-    // TINT8,
+    TINT16_NOHDR = 0,
+    TINT16       = 1,
+    TINT32       = 2,
+    TFLOAT       = 3,
 } data_type_t;
-
-
-typedef enum __attribute__((packed)) // 电机型号
-{
-    MNULL = 0,
-
-    /* 旧名称 */
-    M3536_32,
-    M4438_30,
-    M4438_32,
-    M4538_19,
-    M5043_20,
-    M5046_20,
-    M5047_09,
-    M5047_36,
-    M6056_36,
-    M7256_35,
-    M60SG_35,
-    M60BM_35,
-
-    /* 新名称 */
-    M3508_02,
-    M3516_02,
-    M3532_02,
-    M4530_02,
-    M5009_02,
-    M5036_02,
-    M6036_02,
-    M7033_04,
-    M7535_02,
-    M3532_02_8353,
-    M4530_02_8353,
-    M5036_02_8353,
-
-    MGENERAL,  // 无修正
-    MNONE,
-    MOTOR_TYPE_COUNT,  // 电机类型数量
-} __attribute__((packed)) motor_type_t;
-
-
-typedef struct
-{
-    float k;
-    float d;
-} motor_tqe_adj_t, *p_motor_tqe_adj_t;
-
-
 
 
 /* 控制电机用 */
 float conv_to_turns(const float in_data, const pos_vel_type_t type);
-float tqe_adjust(const float in_data, const motor_type_t motor_type);
-float pid_adjust(const float in_data, const motor_type_t motor_type);
 float cur_float2int(const float in_data, const data_type_t type);
 float vol_float2int(const float in_data, const data_type_t type);
 float pos_float2int(const float in_data, const data_type_t type);
@@ -105,12 +51,9 @@ float tqe_float2int(const float in_data, const data_type_t type);
 float acc_float2int(const float in_data, const data_type_t type);
 float pid_float2int(const float in_data, const data_type_t type);
 
-uint16_t mit_float2int(float x, float x_min, float x_max, unsigned int bits);
-
 
 /* 读取电机用 */
 float conv_from_turns(const float in_data, const pos_vel_type_t type);
-float tqe_restore(const float in_data, const motor_type_t motor_type);
 float cur_int2float(const float in_data, const data_type_t type);
 float vol_int2float(const float in_data, const data_type_t type);
 float pos_int2float(const float in_data, const data_type_t type);
@@ -118,6 +61,15 @@ float vel_int2float(const float in_data, const data_type_t type);
 float tqe_int2float(const float in_data, const data_type_t type);
 float acc_int2float(const float in_data, const data_type_t type);
 float pid_int2float(const float in_data, const data_type_t type);
+float temp_int2float(const float in_data, const data_type_t type);
+
+
+/* MIT 运控编码: 按量程无符号偏移映射到 n bit (饱和限幅), 量程对应 can_mit_int2float */
+uint16_t mit_pos_float2uint(const float in_data);    /* 16bit, ±3.2768 圈 */
+uint16_t mit_vel_float2uint(const float in_data);    /* 12bit, ±10 圈/s */
+uint16_t mit_tqe_float2uint(const float in_data);    /* 12bit, ±100 Nm */
+uint16_t mit_kp_float2uint(const float in_data);     /* 12bit, ±800 */
+uint16_t mit_kd_float2uint(const float in_data);     /* 12bit, ±200 */
 
 
 /* 数据搬运 */
