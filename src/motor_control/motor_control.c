@@ -169,7 +169,7 @@ void motor_pos_vel(port_t portx, const data_type_t type, const uint8_t id, const
  * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（Nm）
  */
 void motor_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_t id,
-                              const float pos, const float vel, const float tqe)
+                          const float pos, const float vel, const float tqe)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -264,7 +264,7 @@ void motor_vel_acc(port_t portx, const data_type_t type, const uint8_t id, const
  * @param kd 单位可为牛米秒每转（Nm·s/rev）、牛米秒每弧度（Nm·s/rad）、或牛米秒每度（Nm·s/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
 void motor_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t id,
-                                   const float pos, const float vel, const float tqe, const float kp, const float kd)
+                             const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 

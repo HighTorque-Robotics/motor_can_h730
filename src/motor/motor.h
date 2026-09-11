@@ -33,13 +33,13 @@ typedef enum __packed  // 电机控制模式码
 
 typedef enum __packed  // 电机查询码
 {
-    SYSTEM                           = 0x03,  // 查询系统信息
-    FW_VERSION                       = 0x04,  // 查询固件版本
-    HW_VERSION                       = 0x05,  // 查询硬件版本
-    MODEL                            = 0x07,  // 查询电机型号
-    FLAUT_POS_VEL_TQE                = 0x0E,  // 错误码、位置、速度、力矩（查询指令 0x0E, 返回帧 8 字节, 适配经典 CAN）
+    QUERY_SYSTEM                           = 0x03,  // 查询系统信息
+    QUERY_FW_VERSION                       = 0x04,  // 查询固件版本
+    QUERY_HW_VERSION                       = 0x05,  // 查询硬件版本
+    QUERY_MODEL                            = 0x07,  // 查询电机型号
+    QUERY_FLAUT_POS_VEL_TQE                = 0x0E,  // 错误码、位置、速度、力矩（查询指令 0x0E, 返回帧 8 字节, 适配经典 CAN）
 
-} many_request_type_t;
+} motor_query_t;
 
 
 typedef enum __packed

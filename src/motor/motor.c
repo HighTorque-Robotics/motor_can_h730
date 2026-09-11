@@ -106,7 +106,7 @@ void motor_print_version()
 /**
  * @brief 获取指定端口和ID的电机状态指针
  * @param portx 指定电机所在的端口，可能的值为 PORT1 或 PORT2
- * @param id 电机 ID
+ * @param identifier 29 位扩展 CAN ID
  * @return 返回类型为 `p_motor_state_s` 的指针
  */
 p_motor_state_s motor_get_state(port_t portx, uint8_t id)
@@ -121,25 +121,43 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id)
  * @brief 解析电机返回信息
  * @param fdcanHandle
  * @param id 电机 ID
- * @param id_type CAN ID bits[17:16] 数据类型 (TINT16/TINT32/TFLOAT)
  * @param p_data can 帧数据指针
  * @param len can 数据长度
  */
-static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id, const uint32_t id_type, const uint8_t *p_data, const uint8_t len)
+static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t identifier, const uint8_t *p_data, const uint8_t len)
 {
+    if (p_data == NULL || len == 0U)
+    {
+        return;
+    }
+
+    const data_type_t id_type = (data_type_t)((identifier >> 16) & 0x3U); // bits[17:16]: 数据类型
+    const uint8_t id          = (uint8_t)((identifier >> 8) & 0x7FU);     // bits[14:8]: 电机 ID
+    const uint8_t dir         = (uint8_t)((identifier >> 15) & 0x1U);     // bit[15]: 1=控制帧, 0=返回帧
+
+    /* motor_process_state 只处理电机返回帧，控制帧直接丢弃 */
+    if (dir != 0U)
+    {
+        return;
+    }
+
+    /* 防止无效 ID 导致状态数组越界 */
+    if (id < MOTOR_ID_MIN || id > MOTOR_MAX_NUM)
+    {
+        return;
+    }
+
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
     const uint8_t id_index = id - 1;
 
     switch (p_data[0])
     {
-    // ===================== FLAUT_POS_VEL_TQE (0x0E) 响应 =====================
+    // ===================== QUERY_FLAUT_POS_VEL_TQE (0x0E) 响应 =====================
     // 返回帧: 查询码(0x0E) | 错误码 | 位置 | 速度 | 力矩, 无模式字段
     // 字段宽度由 CAN ID 类型位决定: TINT16=2B
-    case FLAUT_POS_VEL_TQE:
+    case QUERY_FLAUT_POS_VEL_TQE:
     {
-        switch (id_type)
-        {
-        case TINT16:
+        if (id_type == TINT16)
         {
             int16_t pos = 0, vel = 0, tqe = 0;
 
@@ -151,16 +169,12 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
-            break;
-        }
-        default:
-            break;
         }
         break;
     }
     // ===================== 电机固件版本 (0x04) =====================
     // 返回帧: 04 | patch | minor | major (各1字节)
-    case FW_VERSION:
+    case QUERY_FW_VERSION:
     {
         p_motor_state[id_index].version.major = p_data[3];
         p_motor_state[id_index].version.minor = p_data[2];
@@ -169,7 +183,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     }
     // ===================== 电机硬件版本 (0x05) =====================
     // 返回帧: 05 | patch | minor | major (各1字节)
-    case HW_VERSION:
+    case QUERY_HW_VERSION:
     {
         p_motor_state[id_index].hw_version.major = p_data[3];
         p_motor_state[id_index].hw_version.minor = p_data[2];
@@ -177,7 +191,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         break;
     }
     // ===================== 电机型号查询响应 =====================
-    case MODEL:
+    case QUERY_MODEL:
     {
         const uint8_t model_len = p_data[1];
 
@@ -196,7 +210,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         }
         break;
     }
-    case SYSTEM:
+    case QUERY_SYSTEM:
     {
         if (len >= 2)
         {
@@ -230,29 +244,15 @@ void motor_process_state_all()
     {
         while (HAL_FDCAN_GetRxMessage(port_maping[i].fdcan, FDCAN_RX_FIFO0, &rx_header, rx_data) == HAL_OK)
         {
-            if (rx_header.Identifier != FDCAN_EXTENDED_ID)  // 电机返回帧为 29 位扩展帧, 标准帧直接丢弃
+            if (rx_header.IdType != FDCAN_EXTENDED_ID)
             {
                 continue;
             }
 
-            const uint16_t len = get_fdcan_data_size(rx_header.DataLength);
-
-            if (len != 0)
+            if (rx_header.DataLength != 0)
             {
-                const uint32_t id_type  = (rx_header.Identifier >> 16) & 0x3;   // 提取 bits[17:16] 数据类型, 得 0~2 对应 data_type_t (TINT16_NOHDR=0, TINT16=1)
-                const uint8_t  motor_id = (rx_header.Identifier >> 8) & 0x7F;   // 提取 bits[14:8] 主机ID (电机返回ID, 1~127)
-                const uint8_t  dir      = (rx_header.Identifier >> 15) & 0x1;   // 提取 bit[15] 帧方向: 1=控制帧, 0=返回帧
-
-                /* 帧方向判断: bit[15]=1 为控制(发送)帧, 非返回帧直接丢弃 */
-                if (dir != 0)
-                {
-                    continue;
-                }
-
-                if (motor_id > 0 && motor_id <= MOTOR_MAX_NUM)
-                {
-                    motor_process_state(port_maping[i].fdcan, motor_id, id_type, rx_data, len);
-                }
+                const uint8_t len = (uint8_t)get_fdcan_data_size(rx_header.DataLength);
+                motor_process_state(port_maping[i].fdcan, rx_header.Identifier, rx_data, len);
             }
         }
     }

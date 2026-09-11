@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "fdcan.h"
 #include "usart.h"
 #include "gpio.h"
@@ -26,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "led.h"
 #include "my_can.h"
+#include "debug_print.h"
 
 #include "motor.h"
 #include "motor_control.h"
@@ -93,10 +95,11 @@ int main(void)
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_FDCAN1_Init();
+    MX_DMA_Init();
     MX_USART1_UART_Init();
     MX_USART3_UART_Init();
     MX_FDCAN2_Init();
+    MX_FDCAN1_Init();
     MX_FDCAN3_Init();
     /* USER CODE BEGIN 2 */
 
@@ -115,7 +118,10 @@ int main(void)
         {
             tick_100ms = HAL_GetTick();
             test_motor_control(1);
-
+            motor_state_s *p_state = motor_get_state(PORT1, 1);
+             debug_print(3, (double)p_state->position,
+                         (double)p_state->velocity,
+                         (double)p_state->torque);
         }
         /* USER CODE END WHILE */
 
@@ -124,7 +130,7 @@ int main(void)
         {
             tick_1000ms = HAL_GetTick();
             led_toggle();
-            motor_print_state();
+            //motor_print_state();
         }
         motor_process_state_all();
     }
