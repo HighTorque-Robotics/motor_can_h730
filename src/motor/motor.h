@@ -87,8 +87,7 @@ typedef struct
 
 
 
-void motor_print_state(void);
-void motor_print_version(void);
+
 
 p_motor_state_s motor_get_state(port_t portx, uint8_t id);
 

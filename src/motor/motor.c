@@ -71,42 +71,10 @@ FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx)
 }
 
 
-
-void motor_print_state()
-{
-    for (uint8_t portx = PORT1; portx < PORT1 + MOTOR_PORT_NUM; portx++)
-    {
-        for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
-        {
-            motor_state_s *p_motor_state = motor_get_state(portx, id);
-            printf("PORT: %d, ID: %2d, mode: %2d, temp: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf\r\n", portx, id, p_motor_state->mode, p_motor_state->temp,
-                   p_motor_state->fault, p_motor_state->position, p_motor_state->velocity, p_motor_state->torque);
-        }
-        printf("\r\n");
-    }
-}
-
-
-void motor_print_version()
-{
-    for (uint8_t portx = PORT1; portx < PORT1 + MOTOR_PORT_NUM; portx++)
-    {
-        for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
-        {
-            const p_version_s p_version = &(motor_get_state(portx, id)->version);
-
-            printf("PORT: %d, ID: %2d, version = %d.%d.%d\r\n", portx, id, p_version->major, p_version->minor, p_version->patch);
-        }
-        printf("\r\n");
-    }
-}
-
-
-
 /**
  * @brief 获取指定端口和ID的电机状态指针
  * @param portx 指定电机所在的端口，可能的值为 PORT1 或 PORT2
- * @param identifier 29 位扩展 CAN ID
+ * @param id 29 位扩展 CAN ID
  * @return 返回类型为 `p_motor_state_s` 的指针
  */
 p_motor_state_s motor_get_state(port_t portx, uint8_t id)
@@ -120,7 +88,7 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id)
 /**
  * @brief 解析电机返回信息
  * @param fdcanHandle
- * @param id 电机 ID
+ * @param id 电机 IDid
  * @param p_data can 帧数据指针
  * @param len can 数据长度
  */

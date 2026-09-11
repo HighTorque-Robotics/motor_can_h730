@@ -118,10 +118,6 @@ int main(void)
         {
             tick_100ms = HAL_GetTick();
             test_motor_control(1);
-            motor_state_s *p_state = motor_get_state(PORT1, 1);
-             debug_print(3, (double)p_state->position,
-                         (double)p_state->velocity,
-                         (double)p_state->torque);
         }
         /* USER CODE END WHILE */
 
