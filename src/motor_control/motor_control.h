@@ -12,7 +12,6 @@ void motor_dq_current(port_t portx, const uint8_t id, const float cur);
 void motor_pos(port_t portx, const uint8_t id, const float pos);
 void motor_vel(port_t portx, const uint8_t id, const float vel);
 void motor_tqe(port_t portx, const uint8_t id, const float tqe);
-void motor_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel);
 void motor_pos_vel_MAXtqe(port_t portx, const uint8_t id,
                           const float pos, const float vel, const float tqe);
 void motor_pos_velmax_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc);

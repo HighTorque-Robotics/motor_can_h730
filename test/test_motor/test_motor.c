@@ -24,9 +24,6 @@ void test_motor_control(const uint8_t id)
     case 4:
         motor_tqe(portx, id, 0.5f);
         break;
-    case 5:
-        motor_pos_vel(portx, id, 0.0, 0.5f);
-        break;
     case 6:
         motor_pos_vel_MAXtqe(portx, id, -0.5, 0.5f, 0.5f);
         break;

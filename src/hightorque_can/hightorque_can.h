@@ -19,7 +19,6 @@
 /* 经典 CAN  单帧数据区上限 8 字节, 超过 8 字节的控制模式(int32/float 及普通 MIT 帧)不移植 */
 #define  CAN_CLASSIC_DATA_MAX       8
 
-
 /* dq 电压模式 (d=0, q=实际电压) */
 void hightorque_dq_volt_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t d, int16_t q);
 

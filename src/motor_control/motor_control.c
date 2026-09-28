@@ -95,7 +95,7 @@ void motor_pos_vel(port_t portx, const uint8_t id, const float pos, const float 
     const int16_t pos_raw = (int16_t)pos_float2int(pos_turns, TINT16);
     const int16_t vel_raw = (int16_t)vel_float2int(vel_turns, TINT16);
 
-    hightorque_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, INT16_MIN);  // NAN_INT16
+    hightorque_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, NAN_INT16);
 }
 
 
