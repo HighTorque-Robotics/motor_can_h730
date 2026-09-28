@@ -73,8 +73,8 @@ void SystemClock_Config(void);
 int main(void)
 {
     /* USER CODE BEGIN 1 */
-    uint32_t tick_100ms = 0;
-    uint32_t tick_1000ms = 0;
+    uint32_t tick_ctrl = 0;
+    uint32_t tick_print = 0;
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -114,21 +114,25 @@ int main(void)
     printf("例程版本号："MOTOR_SDK_VERSION"\r\n");
     while (1)
     {
-        if (HAL_GetTick() - tick_100ms >= 100)
-        {
-            tick_100ms = HAL_GetTick();
-            test_motor_control(1);
-        }
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        if (HAL_GetTick() - tick_1000ms >= 1000)
+        /* ---- 100Hz: 控制例程调用 (test_motor_control) ---- */
+        if (HAL_GetTick() - tick_ctrl >= 10)
         {
-            tick_1000ms = HAL_GetTick();
-            led_toggle();
-            //motor_print_state();
+            tick_ctrl = HAL_GetTick();
+            test_motor_control(1);
         }
+
         motor_process_state_all();
+
+        /* ---- 500ms: 终端打印 + LED ---- */
+        if (HAL_GetTick() - tick_print >= 500)
+        {
+            tick_print = HAL_GetTick();
+            led_toggle();
+            test_motor_print_state();
+        }
     }
     /* USER CODE END 3 */
 }
