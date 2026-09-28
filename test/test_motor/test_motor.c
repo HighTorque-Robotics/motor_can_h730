@@ -5,7 +5,6 @@
 void test_motor_control(const uint8_t id)
 {
     const uint8_t mode = 3;
-    const data_type_t type = TINT16;  // 经典 CAN 数据区仅 8 字节, 只支持 int16
     const port_t portx = PORT1;
 
     switch (mode)
