@@ -6,19 +6,18 @@
 #include "convert.h"
 
 
-/* CAN ID 帧头 (接收端 bit[15]=0; 发送控制帧由 fdcan_send 自动置 bit[15]=1) */
+/* CAN ID 帧头 (接收端 bit[15]=0; 发送控制帧需自行 OR 上 ID_SEND_FRAME 置 bit[15]=1) */
 /* bits[18]=CAN MIT, bits[17:16]=数据类型(与 data_type_t 枚举值一致), bit[15]=控制/返回区分 */
 
 /* ---- 数据类型 (由 convert.h 的 data_type_t 枚举左移16位派生, 只改枚举即可同步) ---- */
 #define  ID_PREFIX_TINT16_NOHDR     ((uint32_t)TINT16_NOHDR << 16)  // bits[17:16]=00
 #define  ID_PREFIX_TINT16           ((uint32_t)TINT16       << 16)  // bits[17:16]=01
+#define  ID_PREFIX_MIT              (0x40000u | ID_PREFIX_TINT16)  // MIT 帧头 = bit18(CAN MIT) + bits[17:16]=01(TINT16)
+
+#define  ID_SEND_FRAME         0x8000u  // bits[15]=1(发送帧)
 
 /* 经典 CAN (bxCAN) 单帧数据区上限 8 字节, 超过 8 字节的控制模式(int32/float 及普通 MIT 帧)不移植 */
 #define  CAN_CLASSIC_DATA_MAX       8
-
-
-/* 底层发送: 自动置 bit[15]=1 (控制帧方向), >0x7FF 自动扩展帧 */
-void fdcan_send(FDCAN_HandleTypeDef *hcan, uint32_t id, uint8_t *data, uint16_t size);
 
 
 /* dq 电压模式 (d=0, q=实际电压) */

@@ -4,19 +4,6 @@
 
 
 /**
- * @brief 底层发送: 自动置 bit[15]=1 (发送控制帧), >0x7FF 自动走 29 位扩展帧
- * @param hcan &hcanx
- * @param id CAN ID (标题宏 | 电机ID)
- * @param data 数据指针
- * @param size 数据长度 (经典 CAN 最大 8 字节)
- */
-void fdcan_send(FDCAN_HandleTypeDef *hcan, uint32_t id, uint8_t *data, uint16_t size)
-{
-    can_send(hcan, id | 0x8000u, data, size);  // 自动置 bit[15]=1 (发送控制帧)
-}
-
-
-/**
  * @brief 电压控制 int16
  * @param hcan &hcanx
  * @param id 电机ID
@@ -30,7 +17,7 @@ void hightorque_dq_volt_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t d, 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -48,7 +35,7 @@ void hightorque_dq_current_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -64,7 +51,7 @@ void hightorque_torque_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t torq
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -80,7 +67,7 @@ void hightorque_pos_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t pos)
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -96,7 +83,7 @@ void hightorque_vel_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t vel)
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -116,7 +103,7 @@ void hightorque_pos_vel_tqe_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t
     my_memcpy(&cmd[4], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &torque, sizeof(torque));
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -134,7 +121,7 @@ void hightorque_vel_acc_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t vel
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[4], &acc, sizeof(acc));
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -154,7 +141,7 @@ void hightorque_pos_vel_acc_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t
     my_memcpy(&cmd[4], &vel_max, sizeof(vel_max));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -182,7 +169,7 @@ void hightorque_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *hcan, uint8_t id,
     tdata[6] = (kp >> 8) & 0x0f | ((kd & 0x0f) << 4);
     tdata[7] = kd >> 4;
 
-    can_send(hcan, 0x58000 | id, tdata, sizeof(tdata));
+    can_send(hcan, ID_PREFIX_MIT | id | ID_SEND_FRAME, tdata, sizeof(tdata));
 }
 
 
@@ -195,7 +182,7 @@ void hightorque_stop_int16(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_STOP, QUERY_FLAUT_POS_VEL_TQE};
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -208,7 +195,7 @@ void hightorque_brake_int16(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_BRAKE, QUERY_FLAUT_POS_VEL_TQE};
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -221,7 +208,7 @@ void hightorque_request_state_int16(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, QUERY_FLAUT_POS_VEL_TQE};
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -234,7 +221,7 @@ void hightorque_request_fw_version(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, QUERY_FW_VERSION};
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -247,7 +234,7 @@ void hightorque_request_hw_version(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, QUERY_HW_VERSION};
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -260,7 +247,7 @@ void hightorque_request_model(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, QUERY_MODEL};
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -279,7 +266,7 @@ void hightorque_request_timed_return(FDCAN_HandleTypeDef *hcan, uint8_t id, uint
 
     my_memcpy(&cmd[4], &t_us, sizeof(uint32_t));
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -292,7 +279,7 @@ void hightorque_pos_rezero(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x03};
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -305,7 +292,7 @@ void hightorque_conf_write(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x02};
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -318,7 +305,7 @@ void hightorque_reset(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x01};
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
 
 
@@ -341,5 +328,5 @@ void hightorque_id(FDCAN_HandleTypeDef *hcan, uint8_t old_id, uint8_t new_id)
 
     cmd[3] = new_id;
 
-    fdcan_send(hcan, ID_PREFIX_TINT16 | old_id, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | old_id | ID_SEND_FRAME, cmd, sizeof(cmd));
 }
