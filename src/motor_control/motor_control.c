@@ -81,25 +81,6 @@ void motor_tqe(port_t portx, const uint8_t id, const float tqe)
 
 
 /**
- * @brief 位置速度模式，以目标速度运动到目标位置，不限制加速度和最大输出力矩（并让电机返回状态信息）
- * @param portx CAN 通道选择，用于指定通信的 CAN 端口
- * @param id 电机 ID
- * @param pos 目标位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- */
-void motor_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel)
-{
-    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const int16_t pos_raw = (int16_t)pos_float2int(pos_turns, TINT16);
-    const int16_t vel_raw = (int16_t)vel_float2int(vel_turns, TINT16);
-
-    hightorque_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, NAN_INT16);
-}
-
-
-/**
  * @brief 位置速度模式，以目标速度运动到目标位置，并限制最大输出力矩（并让电机返回状态信息）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
