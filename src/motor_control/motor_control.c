@@ -9,7 +9,7 @@
  * @param id 电机 ID
  * @param volt Q 相电压，单位：（V），例：0.3 -> 0.3V（D 轴固定为 0）
  */
-void motor_dq_vlot(port_t portx, const uint8_t id, const float volt)
+void motor_dq_volt(port_t portx, const uint8_t id, const float volt)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const int16_t volt_raw = (int16_t)vol_float2int(volt, TINT16);

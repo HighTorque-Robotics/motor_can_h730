@@ -7,7 +7,7 @@
 #include "motor.h"
 
 
-void motor_dq_vlot(port_t portx, const uint8_t id, const float volt);
+void motor_dq_volt(port_t portx, const uint8_t id, const float volt);
 void motor_dq_current(port_t portx, const uint8_t id, const float cur);
 void motor_pos(port_t portx, const uint8_t id, const float pos);
 void motor_vel(port_t portx, const uint8_t id, const float vel);
