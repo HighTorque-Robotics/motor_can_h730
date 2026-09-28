@@ -124,8 +124,6 @@ int main(void)
             test_motor_control(1);
         }
 
-        motor_process_state_all();
-
         /* ---- 500ms: 终端打印 + LED ---- */
         if (HAL_GetTick() - tick_print >= 500)
         {
@@ -133,6 +131,8 @@ int main(void)
             led_toggle();
             test_motor_print_state();
         }
+        motor_process_state_all();
+
     }
     /* USER CODE END 3 */
 }
