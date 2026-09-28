@@ -6,7 +6,7 @@
 #include "convert.h"
 
 
-/* CAN ID 帧头 (接收端 bit[15]=0; 发送控制帧需自行 OR 上 ID_SEND_FRAME 置 bit[15]=1) */
+/* CAN ID 帧头 (接收端 bit[15]=0; 发送控制帧在执行can_send时，通过ID_SEND_FRAME置 bit[15]=1) */
 /* bits[18]=CAN MIT, bits[17:16]=数据类型(与 data_type_t 枚举值一致), bit[15]=控制/返回区分 */
 
 /* ---- 数据类型 (由 convert.h 的 data_type_t 枚举左移16位派生, 只改枚举即可同步) ---- */
@@ -16,7 +16,7 @@
 
 #define  ID_SEND_FRAME         0x8000u  // bits[15]=1(发送帧)
 
-/* 经典 CAN (bxCAN) 单帧数据区上限 8 字节, 超过 8 字节的控制模式(int32/float 及普通 MIT 帧)不移植 */
+/* 经典 CAN  单帧数据区上限 8 字节, 超过 8 字节的控制模式(int32/float 及普通 MIT 帧)不移植 */
 #define  CAN_CLASSIC_DATA_MAX       8
 
 
@@ -44,8 +44,7 @@ void hightorque_vel_acc_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t vel
 /* 位置、速度、加速度限制（梯形控制） */
 void hightorque_pos_vel_acc_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc);
 
-/* 运控模式 int16 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)
- * pos 单位 0.0001 圈, vel 单位 0.00025 转/秒, tqe 单位见文档, kp/kd 内部 Mkp/Mkd = 值 × 0.1, CAN ID = 0x10000 | id */
+/* 运控模式 int16 (输出力矩 = 位置偏差 * KP + 速度偏差 * KD + 前馈力矩) */
 void hightorque_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *hcan, uint8_t id,
                                         int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
 

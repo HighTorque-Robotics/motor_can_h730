@@ -10,7 +10,7 @@ void test_motor_control(const uint8_t id)
     switch (mode)
     {
     case 0:
-        motor_dq_vlot(portx, id, 0.0);
+        motor_dq_volt(portx, id, 0.0);
         break;
     case 1:
         motor_dq_current(portx, id, 0.5f);

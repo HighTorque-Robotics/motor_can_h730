@@ -18,7 +18,7 @@ const port_mapping_s port_maping[MOTOR_PORT_NUM] =  // 通道映射表
 
     // {
     //     .port = PORT2,
-    //     .fdcan = &hcan2,
+    //     .fdcan = &hfdcan2,
     //     .state = motor_state_port[1],
     // },
 };
@@ -88,7 +88,7 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id)
 /**
  * @brief 解析电机返回信息
  * @param fdcanHandle
- * @param id 电机 IDid
+ * @param identifier 电机ID
  * @param p_data can 帧数据指针
  * @param len can 数据长度
  */
@@ -120,10 +120,10 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t
 
     switch (p_data[0])
     {
-    // ===================== QUERY_FLAUT_POS_VEL_TQE (0x0E) 响应 =====================
+    // ===================== QUERY_FAULT_POS_VEL_TQE (0x0E) 响应 =====================
     // 返回帧: 查询码(0x0E) | 错误码 | 位置 | 速度 | 力矩, 无模式字段
     // 字段宽度由 CAN ID 类型位决定: TINT16=2B
-    case QUERY_FLAUT_POS_VEL_TQE:
+    case QUERY_FAULT_POS_VEL_TQE:
     {
         if (id_type == TINT16)
         {
@@ -167,7 +167,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t
         {
             char model_str[25] = {0};
 
-            // 型号数据为 ASCII 字符直读 (如 0x35='5', 0x5F='_'), 直接复制即可
+            // 型号数据为 ASCII 字符直读 (如 0x35='5', 0x5F='_')
             for (uint8_t i = 0; i < model_len; i++)
             {
                 model_str[i] = (char)p_data[2 + i];

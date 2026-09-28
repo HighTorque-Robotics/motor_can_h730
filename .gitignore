@@ -15,6 +15,7 @@
 *.eide-template
 
 MDK-ARM/CAN_h730/*
+MDK-ARM/RTE/*
 MDK-ARM/*.uvguix.*
 MDK-ARM/fdcan_h730.uvguix.*
 MDK-ARM/.vscode/*

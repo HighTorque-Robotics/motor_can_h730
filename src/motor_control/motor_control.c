@@ -183,21 +183,19 @@ void motor_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id,
     const float kp_turns = conv_from_turns(kp, MOTOR_DATA_TYPE_FLAG);
     const float kd_turns = conv_from_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
-    /* 编码范围 (对应 can_mit_int2float): pos 16bit ±3.2768, vel 12bit ±10, tqe 12bit ±100, kp 12bit ±800, kd 12bit ±200
-     * 无符号偏移映射: 物理 0 = 量程中点, 打包仍走 0x10000|id int16 切片 */
+
     const int16_t pos_raw = (int16_t)mit_pos_float2uint(pos_turns);
     const int16_t vel_raw = (int16_t)mit_vel_float2uint(vel_turns);
     const int16_t tqe_raw = (int16_t)mit_tqe_float2uint(tqe);
     const int16_t kp_raw = (int16_t)mit_kp_float2uint(kp_turns);
     const int16_t kd_raw = (int16_t)mit_kd_float2uint(kd_turns);
 
-    /* 运控模式 (CAN ID = 0x10000 | id) */
     hightorque_pos_vel_tqe_kp_kd_int16(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
 }
 
 
 /**
- * @brief 发送查询查询电机状态信息的指令（在motor_process_state中解析）
+ * @brief 发送查询电机状态信息的指令（在motor_process_state中解析）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  */
