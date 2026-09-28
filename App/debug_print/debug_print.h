@@ -1,5 +1,5 @@
-#ifndef _DEBUG_PEINT_H
-#define _DEBUG_PEINT_H
+#ifndef _DEBUG_PREINT_H
+#define _DEBUG_PREINT_H
 #include <stdint.h>
 
 

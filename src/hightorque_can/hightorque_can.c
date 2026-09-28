@@ -17,7 +17,7 @@ void hightorque_dq_volt_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t d, 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -35,7 +35,7 @@ void hightorque_dq_current_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -51,7 +51,7 @@ void hightorque_torque_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t torq
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -67,7 +67,7 @@ void hightorque_pos_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t pos)
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -83,7 +83,7 @@ void hightorque_vel_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t vel)
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -103,7 +103,7 @@ void hightorque_pos_vel_tqe_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t
     my_memcpy(&cmd[4], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &torque, sizeof(torque));
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -121,7 +121,7 @@ void hightorque_vel_acc_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t vel
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[4], &acc, sizeof(acc));
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -141,7 +141,7 @@ void hightorque_pos_vel_acc_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t
     my_memcpy(&cmd[4], &vel_max, sizeof(vel_max));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -182,7 +182,7 @@ void hightorque_stop_int16(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_STOP, QUERY_FAULT_POS_VEL_TQE};
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -195,7 +195,7 @@ void hightorque_brake_int16(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_BRAKE, QUERY_FAULT_POS_VEL_TQE};
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -208,7 +208,7 @@ void hightorque_request_state_int16(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, QUERY_FAULT_POS_VEL_TQE};
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, (uint8_t *)cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -221,7 +221,7 @@ void hightorque_request_fw_version(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, QUERY_FW_VERSION};
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, (uint8_t *)cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -234,7 +234,7 @@ void hightorque_request_hw_version(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, QUERY_HW_VERSION};
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, (uint8_t *)cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -247,7 +247,7 @@ void hightorque_request_model(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, QUERY_MODEL};
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, (uint8_t *)cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -266,7 +266,7 @@ void hightorque_request_timed_return(FDCAN_HandleTypeDef *hcan, uint8_t id, uint
 
     my_memcpy(&cmd[4], &t_us, sizeof(uint32_t));
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -279,7 +279,7 @@ void hightorque_pos_rezero(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x03};
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -292,7 +292,7 @@ void hightorque_conf_write(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x02};
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -305,7 +305,7 @@ void hightorque_reset(FDCAN_HandleTypeDef *hcan, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x01};
 
-    can_send(hcan, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
@@ -328,5 +328,5 @@ void hightorque_id(FDCAN_HandleTypeDef *hcan, uint8_t old_id, uint8_t new_id)
 
     cmd[3] = new_id;
 
-    can_send(hcan, ID_PREFIX_TINT16 | old_id | ID_SEND_FRAME, cmd, sizeof(cmd));
+    can_send(hcan, ID_PREFIX_TINT16 | ID_SEND_FRAME | old_id, cmd, sizeof(cmd));
 }
