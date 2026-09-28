@@ -84,11 +84,6 @@ typedef struct
     const p_motor_state_s state;
 } port_mapping_s, *p_port_mapping_s;
 
-
-
-
-
-
 p_motor_state_s motor_get_state(port_t portx, uint8_t id);
 
 FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx);
@@ -96,9 +91,6 @@ p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle);
 p_motor_state_s motor_get_state_pointer2(port_t portx);
 void motor_process_state_all(void);
 
-
-
-
-#define  MOTOR_SDK_VERSION   "4.0.0-can1"
+#define  MOTOR_SDK_VERSION   "4.0.0"
 
 #endif

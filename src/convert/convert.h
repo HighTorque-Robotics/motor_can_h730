@@ -24,7 +24,7 @@ static inline void MOTOR_ERR(void) {}
 #define MY_PI  (3.14159265358f)
 
 
-typedef enum
+typedef enum __packed
 {
     RADIAN_2PI = 0,  // 弧度制
     ANGLE_360,       // 角度制

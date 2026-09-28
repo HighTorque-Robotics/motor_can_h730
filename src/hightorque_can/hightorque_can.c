@@ -158,18 +158,18 @@ void hightorque_pos_vel_acc_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t
 void hightorque_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *hcan, uint8_t id,
                                         int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
 {
-    static uint8_t tdata[8] = {0};
+    static uint8_t cmd[8] = {0};
 
-    tdata[0] = pos & 0xff;
-    tdata[1] = (pos >> 8) & 0xff;
-    tdata[2] = vel & 0xff;
-    tdata[3] = ((vel >> 8) & 0x0f) | ((tqe & 0x0f) << 4);
-    tdata[4] = (tqe >> 4) & 0xff;
-    tdata[5] = kp & 0xff;
-    tdata[6] = (kp >> 8) & 0x0f | ((kd & 0x0f) << 4);
-    tdata[7] = kd >> 4;
+    cmd[0] = pos & 0xff;
+    cmd[1] = (pos >> 8) & 0xff;
+    cmd[2] = vel & 0xff;
+    cmd[3] = ((vel >> 8) & 0x0f) | ((tqe & 0x0f) << 4);
+    cmd[4] = (tqe >> 4) & 0xff;
+    cmd[5] = kp & 0xff;
+    cmd[6] = (kp >> 8) & 0x0f | ((kd & 0x0f) << 4);
+    cmd[7] = kd >> 4;
 
-    can_send(hcan, ID_PREFIX_MIT | id | ID_SEND_FRAME, tdata, sizeof(tdata));
+    can_send(hcan, ID_PREFIX_MIT | ID_SEND_FRAME | id, cmd, sizeof(cmd));
 }
 
 
