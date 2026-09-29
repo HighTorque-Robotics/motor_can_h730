@@ -43,7 +43,7 @@ void hightorque_vel_acc_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t vel
 /* 位置、速度、加速度限制（梯形控制） */
 void hightorque_pos_vel_acc_int16(FDCAN_HandleTypeDef *hcan, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc);
 
-/* 运控模式 int16 (输出力矩 = 位置偏差 * KP + 速度偏差 * KD + 前馈力矩) */
+/* 运控模式 int16 (输出力矩 = (目标位置-当前位置) * kp + (目标速度-当前速度) * kd + 前馈力矩) */
 void hightorque_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *hcan, uint8_t id,
                                         int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
 

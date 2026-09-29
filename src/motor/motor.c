@@ -88,20 +88,20 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id)
 /**
  * @brief 解析电机返回信息
  * @param fdcanHandle
- * @param identifier 电机ID
+ * @param id 电机ID
  * @param p_data can 帧数据指针
  * @param len can 数据长度
  */
-static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t identifier, const uint8_t *p_data, const uint8_t len)
+static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t id, const uint8_t *p_data, const uint8_t len)
 {
     if (p_data == NULL || len == 0U)
     {
         return;
     }
 
-    const data_type_t id_type = (data_type_t)((identifier >> 16) & 0x3U); // bits[17:16]: 数据类型
-    const uint8_t id          = (uint8_t)((identifier >> 8) & 0x7FU);     // bits[14:8]: 电机 ID
-    const uint8_t dir         = (uint8_t)((identifier >> 15) & 0x1U);     // bit[15]: 1=控制帧, 0=返回帧
+    const data_type_t id_type = (data_type_t)((id >> 16) & 0x3U); // bits[17:16]: 数据类型
+    const uint8_t motor_id          = (uint8_t)((id >> 8) & 0x7FU);     // bits[14:8]: 电机 ID
+    const uint8_t dir         = (uint8_t)((id >> 15) & 0x1U);     // bit[15]: 1=控制帧, 0=返回帧
 
     /* motor_process_state 只处理电机返回帧，控制帧直接丢弃 */
     if (dir != 0U)
@@ -110,13 +110,13 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t
     }
 
     /* 防止无效 ID 导致状态数组越界 */
-    if (id < MOTOR_ID_MIN || id > MOTOR_MAX_NUM)
+    if (motor_id < MOTOR_ID_MIN || motor_id > MOTOR_MAX_NUM)
     {
         return;
     }
 
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
-    const uint8_t id_index = id - 1;
+    const uint8_t id_index = motor_id - 1;
 
     switch (p_data[0])
     {
@@ -219,7 +219,7 @@ void motor_process_state_all()
 
             if (rx_header.DataLength != 0)
             {
-                const uint8_t len = (uint8_t)get_fdcan_data_size(rx_header.DataLength);
+                const uint8_t len = (uint8_t)can_dlc2size(rx_header.DataLength);
                 motor_process_state(port_maping[i].fdcan, rx_header.Identifier, rx_data, len);
             }
         }
@@ -232,5 +232,5 @@ void motor_process_state_all()
  */
 void HAL_CAN_RxFifo0MsgPendingCallback(FDCAN_HandleTypeDef *hcan)
 {
-    motor_process_state_all();
+ //   motor_process_state_all();
 }

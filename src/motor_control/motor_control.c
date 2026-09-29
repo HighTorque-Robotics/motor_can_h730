@@ -144,7 +144,7 @@ void motor_vel_acc(port_t portx, const uint8_t id, const float vel, const float 
 
 
 /**
- * @brief MIT模式 (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)（并让电机返回状态信息）
+ * @brief MIT模式 (输出力矩 = (目标位置-当前位置) * kp + (目标速度-当前速度) * kd + 前馈力矩)（并让电机返回状态信息）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  * @param pos 位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
