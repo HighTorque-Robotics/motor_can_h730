@@ -12,23 +12,24 @@ FDCAN_TxHeaderTypeDef TxHeader =
     .MessageMarker = 0,                         // 消息标记
 };
 
-
 uint32_t can_size2dlc(uint16_t size)
 {
     if (size > 8)
     {
         size = 8;
     }
-    return size;
+    return ((uint32_t)size << 16); // 16是位置，DLC 在 bit16~bit19
 }
 
 uint16_t can_dlc2size(uint32_t dlc)
 {
-    if (dlc > 8)
+    const uint16_t code = (uint16_t)((dlc >> 16) & 0x0F); //DLC 占 4 位: 0x0F
+
+    if (code > 8)
     {
-        return 8; // 最大8字节
+        return 8; 
     }
-    return (uint16_t)dlc;
+    return code;
 }
 
 
